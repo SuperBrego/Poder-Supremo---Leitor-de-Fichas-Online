@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leitor e Exibição de Fichas Poder Supremo M&M</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles/style.css">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body data-bs-theme="dark">
+
+    <!-- ----------------------------------------------------------------------------------- -->
+    <!-- Navegação -->
+    <nav class="navbar navbar-expand-lg navbar-dark border-bottom border-2 border-white bg-opacity-10 min-vw-100">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="favicon.ico" alt="Bootstrap" width="30" height="24">
+                <b>Poder Supremo</b> | Leitor de Fichas •
+            </a>
+            
+            <div class="collapse navbar-collapse" id="header-navbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Como Usar</a>
+                    </li>
+                   
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Notas de Atualizações</a>
+                    </li>
+                </ul>
+                <a class="nav-link active" aria-current="page" href="#">Sobre</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- ----------------------------------------------------------------------------------- -->
+    <!-- Corpo -->
+    <main id="main-main max-vw-100">
+        <div class="image-background"><div class="image-foreground"></div></div>
+        <!-- <div id="liveAlertPlaceholder"></div> -->
+        <div id="content"></div>
+    </main>
+    
+    <!-- ----------------------------------------------------------------------------------- -->
+    <!-- Error Modal -->
+    <div class="modal fade" id="load-error-modal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="errorModalLabel">Erro ao carregar a ficha</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Você parece estar usando um portfólio com fichas de uma versão antiga do <b><i>Poder Supremo</i></b>. Confira se o mesmo está em uma versão igual ou acima da 1.10.0 (em <i>Ajuda → Versão</i>)</p>
+                    <p>Você não precisa fazer uma ficha nova do zero para poder usar o site: apenas abra o arquivo novamente e o salve com essa nova versão que automaticamente ele incluirá os dados necessários para carregá-lo aqui.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="scripts/alerts.js"></script>
+    <script src="scripts/render.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
