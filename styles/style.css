@@ -1,10 +1,12 @@
 @import url(fonts.css);
 @import url(boot-aux.css);
+@import url(animations.css);
 
 #content {
     height: 100%;
     width: 100%;
     position: relative;
+    animation: fadeInAnimation 1s ease-in forwards;
 }
 
 main {
@@ -34,31 +36,6 @@ main {
     background-color: #11111199;
 }
 
-/* Definindo a animação */
-@keyframes bg_slideshow {
-    0% { 
-        background-image: url('../images/background/bg_01.png');
-    }
-    16% { 
-        background-image: url('../images/background/bg_02.png');
-    }
-    32% { 
-        background-image: url('../images/background/bg_03.png');
-    }
-    48% { 
-        background-image: url('../images/background/bg_04.png');
-    }
-    64% { 
-        background-image: url('../images/background/bg_05.png');
-    }
-    80% { 
-        background-image: url('../images/background/bg_06.png');
-    }
-    100% { 
-        background-image: url('../images/background/bg_01.png');
-    }
-}
-
 .main_container {
     height: 100%;
     display: flex;
@@ -67,4 +44,24 @@ main {
     align-items: center;
     padding: 2% 0;      
     position: relative; /* Para garantir que o conteúdo fique acima do fundo */  
+}
+
+/* *************** */
+/* Cards */
+/* *************** */
+.card-block {
+    overflow-y: auto;
+}
+
+/* Card Load */
+.character-card {
+    width: 300px;
+    opacity: 0;
+    animation: fadeInAnimation 1s ease-in forwards;
+    font-size: 1vw;
+}
+.character-card img {
+    max-height: 250px;
+    max-width: 250px;
+    align-self: center;
 }

@@ -47,7 +47,7 @@ function characterTest(portfolio) {
             return;
         }
 
-        portfolioData.push(character.exportData);
+        portfolioData.push({ gallery: character.gallery, data: character.exportData});
     }
 
     renderCards(portfolioData);

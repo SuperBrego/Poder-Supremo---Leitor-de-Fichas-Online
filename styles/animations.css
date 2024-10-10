@@ -1,0 +1,20 @@
+/* Animação do Background */
+@keyframes bg_slideshow {
+    0% { background-image: url('../images/background/bg_01.png');   }
+    16% { background-image: url('../images/background/bg_02.png');  }
+    32% { background-image: url('../images/background/bg_03.png');  }
+    48% { background-image: url('../images/background/bg_04.png');  }
+    64% { background-image: url('../images/background/bg_05.png');  }
+    80% { background-image: url('../images/background/bg_06.png');  }
+    100% { background-image: url('../images/background/bg_01.png'); }
+}
+
+@keyframes fadeInAnimation {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeInAnimation 1s ease-in forwards;
+}
