@@ -32,23 +32,16 @@ function handleFileUpload(event) {
     }
 }
 
-var portfolioData = [];
-
 // Função para verificar as propriedades no JSON
 function characterTest(portfolio) {
-    const characters = portfolio.characters;
-    portfolioData = [];
-    
-    for(let character of characters) {
-        const hasExportData = character.hasOwnProperty('exportData');
-        
-        if (!hasExportData) {
+    let portfolioData = getPortData(portfolio);
+
+    for(let portData of portfolioData) {
+        if(!portData.data) {
             $('#load-error-modal').modal('show');
             return;
         }
-
-        portfolioData.push({ gallery: character.gallery, data: character.exportData});
     }
 
-    renderCards(portfolioData);
+    renderSheetList(portfolioData);
 }

@@ -14,6 +14,11 @@ main {
     position: relative;
 }
 
+/* Navbar */
+.navbar {
+    height: 10vh;
+}
+
 #main-header h1 {
     color: gold;
 }
@@ -33,7 +38,7 @@ main {
 .image-foreground {
     width: 100%;
     height: 100%;
-    background-color: #11111199;
+    background-color: rgba(0, 0, 0, .80);
 }
 
 .main_container {
@@ -47,10 +52,18 @@ main {
 }
 
 /* *************** */
+/* Cabeçalho Navbar */
+/* *************** */
+#header-navbar li:nth-child(-n+3) a::after {
+    content: ' • ';
+}
+
+/* *************** */
 /* Cards */
 /* *************** */
 .card-block {
     overflow-y: auto;
+    height: 80%;
 }
 
 /* Card Load */
@@ -58,10 +71,27 @@ main {
     width: 300px;
     opacity: 0;
     animation: fadeInAnimation 1s ease-in forwards;
-    font-size: 1vw;
+    font-size: .8vw;
 }
 .character-card img {
     max-height: 250px;
     max-width: 250px;
     align-self: center;
+}
+
+/* Customiza a barra de rolagem */
+::-webkit-scrollbar {
+    width: 12px; /* Largura da barra de rolagem */
+}
+
+/* Customiza a parte de "polegar" da barra de rolagem */
+::-webkit-scrollbar-thumb {
+    background: #888; /* Cor */
+    border-radius: 6px; /* Bordas arredondadas */
+}
+
+/* Customiza a parte de trilho da barra de rolagem */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Cor do trilho */
+    border-radius: 6px; /* Bordas arredondadas */
 }

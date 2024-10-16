@@ -1,22 +1,16 @@
 const mainContent = document.getElementById('content');
 
-function renderCards(portfolioData) {
+function renderSheetList(portfolioData) {
     let cardBlock = document.createElement('div');
-    cardBlock.className = 'content-fluid d-flex justify-content-center column-gap-3 card-block';
+    cardBlock.className = 'content-fluid d-flex justify-content-center mt-2 p-2 row-gap-2 column-gap-3 flex-wrap card-block';
 
     let returnBtn = document.createElement('button');
     returnBtn.className = 'btn btn-primary p-2 btn-lg ms-3 mt-3';
     returnBtn.innerHTML = '← Retornar';
     returnBtn.onclick = () => { mainContent.innerHTML = HomeMainContent(); }
-    // cardBlock.appendChild(returnBtn);
 
-    let cardElement;
     for(let index = 0; index < portfolioData.length; index++) {
-        cardElement = document.createElement('div');
-        cardElement.className = 'card character-card';
-        cardElement.style.animation = `fadeInAnimation ${2 * (index + .5)}s linear forwards`;
-        cardElement.innerHTML = CharacterChard(portfolioData[index]);
-        cardBlock.appendChild(cardElement);
+        cardBlock.insertAdjacentHTML('beforeend', CharacterChard(portfolioData[index], index));
     }
     mainContent.innerHTML = '';
     mainContent.appendChild(returnBtn);
@@ -35,7 +29,7 @@ const HomeMainContent = () => {
     </div>  `
 }
 
-const CharacterChard = (character) => {
+const CharacterChard = (character, index) => {
     let image = character.gallery[0];
     let name = character.data.personalInfo.heroicName;
     let realName = character.data.personalInfo.realName;
@@ -43,14 +37,36 @@ const CharacterChard = (character) => {
     let points = character.data.points.abilities + 
     character.data.points.advantages + character.data.points.powers + 
     character.data.points.skills + character.data.points.defenses; 
+
+    let characterType = character.data.characterType;
+    console.log(characterType)
+    let typeText = '';
+
+    // 0- Personagem, 1- Capanga, 2- Parceiro, 3- Metamorfose
+
+    switch(characterType) {
+        default:
+        case 0: typeText = 'Personagem'; break;
+        case 1: typeText = 'Capanga'; break;
+        case 2: typeText = 'Parceiro'; break;
+        case 3: typeText = 'Invocação'; break;
+        case 4: typeText = 'Metamorfose'; break;
+    }
     
     return `
-    <img src="${image}" class="card-img-top" alt="${name}">
-    <div class="card-body">
-        <p class="card-title"> <b>${name} • NP ${powerLevel}</b> </p>
-        ${realName.length > 0 && `<p class="card-subtitle mb-2 text-body-secondary">${realName}</p>`}
-        <p class="card-text">${name}, Nível de Poder ${powerLevel}, Pontos ${points}</p>
+    <div class="card character-card" style="animation: fadeInAnimation ${1 * (index + .25)}s linear forwards;">
+        <div class="card-header"> ${typeText} </div> 
+        <img src="${image}" class="card-img-top" alt="${name}">
+        <div class="card-body">
+            <p class="card-title"> <b>${name} • NP ${powerLevel}</b> </p>
+            ${realName && (realName.length > 0) && `<p class="card-subtitle mb-2 text-body-secondary">${realName}</p>`}
+            <p class="card-text">${name}, Nível de Poder ${powerLevel}, Pontos ${points}</p>
+        </div>
+        <div class='card-footer'><a href="#" class="btn btn-primary">Ir à ficha</a></div>
     </div>
-    <div class='card-footer'><a href="#" class="btn btn-primary">Ir à ficha</a></div>
     `;
 }
+
+function renderExportOptions() {}
+
+function renderCombatTracker() {}
