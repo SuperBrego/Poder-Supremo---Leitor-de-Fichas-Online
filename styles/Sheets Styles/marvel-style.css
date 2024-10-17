@@ -1,0 +1,203 @@
+
+/* *************** */
+/*  */
+/* *************** */
+.marvel-character-sheet {
+    position: relative;
+
+    --displayScale: .7;
+
+    .a4-page {
+        transform: scale(var(--displayScale));
+        transform-origin: top left;
+        position: absolute;
+        /* top: 0; */
+        left: 0;
+    }
+}
+
+.a4-page {
+    width: 210mm;
+    height: 278mm; /* 278mm é a altura do A4 caber em uma página do jsPDF */ 
+    background-color: #eee;
+    color: #111;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    /* gap: 10mm; */
+    gap: 1mm;
+    font-size: 14px;;
+    
+    justify-items: flex-start;
+    background: no-repeat url(../images/marvel-background.jpg);
+    background-size: cover;
+    page-break-after: always;
+}
+
+#image-header {
+    height: 25%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.character-title {
+    color: #eee;
+    background-color: #1111111e;
+}
+
+/* ******************************************* */
+/* Todos os corpos */
+/* ******************************************* */
+#image-header { 
+    padding: 0 1rem; 
+}
+
+#abilities, #defenses-powers, #skillsAdvs-powers {
+    padding: 0 2rem;
+}
+
+#skills-advs {
+    padding: 1rem 0;
+}
+
+#skills, #advantages {
+    padding: 1rem .5rem;
+}
+
+#power-list-page1 {
+    padding: 0 1rem;
+}
+#power-list-page2 {
+    padding: 1rem 0;
+}
+
+/* ******************************************* */
+/* Habilidades */
+/* ******************************************* */
+#abilities {
+    display: flex;
+    gap: 5px;
+}
+#abilities .abi-circle { top: -50px; }
+
+.abi-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border-width: 8px;
+    border-style: solid;
+    background-color: #eee;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-items: flex-start;
+    position: relative;
+}
+
+.abi-rank {
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.abi-name {
+    text-align: center;
+    text-transform: uppercase;
+    z-index: 2;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* ******************************************* */
+/* Defesas */
+/* ******************************************* */
+#defenses-powers {
+    display: flex;
+    justify-self: center;
+    height: 60%;
+}
+
+#defenses {
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-image: linear-gradient(#00000000, #999 ,#00000000) 30;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5%;
+}
+
+.defItem header {
+    font-weight: bold;
+}
+
+/* ******************************************* */
+/* Perícias */
+/* ******************************************* */
+#skillsAdvs-powers {
+    display: flex;
+    /* justify-content: center; */
+    /* align-items: flex-start; */
+    height: 90%;
+}
+
+#skills-advs {
+    display: flex;
+    flex-direction: column;
+    
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-image: linear-gradient(#00000000, #999 ,#00000000) 30;
+}
+
+#skills {
+    display: grid;
+    grid-template-columns: 70% repeat(2, 15%);
+    gap: 10px;
+    width: 100%;
+}
+#skills > header:nth-child(-n+3){
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.skill-rank, .skill-total {
+    text-align: center;
+}
+
+/* ******************************************* */
+/* Vantagens */
+/* ******************************************* */
+/* #advantages {
+    
+} */
+
+/* ******************************************* */
+/* Poderes */
+/* ******************************************* */
+.power-listing {
+    display: grid;
+    /* grid-template-columns: repeat(2, 50%); */
+    height: 100%;
+}
+
+.power-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: fit-content;
+}
+.power-block header {
+    font-size: 18px;
+    color: #4f84e7;
+    font-weight: bold;
+}
+.power-block b {
+    color: goldenrod;
+}
+.power-block p {
+    font-size: .7rem;
+}

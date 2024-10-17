@@ -1,3 +1,4 @@
+var currentPortfolio = {};
 const _MultiplePowersList = [5043, 5045, 5046, 5048];
 
 function getPortData(portfolio) {
@@ -27,9 +28,9 @@ function getCharactersData(character) {
     let summons = findSummons(character);
     let metamorphs = findMetamorphs(character);
     
-    for(let minion of minions) minionsData.push({data: minion.exportData, gallery: minion.gallery});
-    for(let sidekick of sidekicks) sidekicksData.push({data: sidekick.exportData, gallery: sidekick.gallery});
-    for(let summon of summons) summonsData.push({data: summon.exportData, gallery: summon.gallery});
+    for(let minion of minions)      minionsData.push({data: minion.exportData, gallery: minion.gallery});
+    for(let sidekick of sidekicks)  sidekicksData.push({data: sidekick.exportData, gallery: sidekick.gallery});
+    for(let summon of summons)      summonsData.push({data: summon.exportData, gallery: summon.gallery});
     for(let metamorph of metamorphs) metamorphsData.push({data: metamorph.exportData, gallery: metamorph.gallery});
 
     return [characterData].concat(minionsData, sidekicksData, summonsData, metamorphsData);

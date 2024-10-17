@@ -26,7 +26,9 @@
             <div class="collapse navbar-collapse" id="header-navbar">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link disabled" aria-current="page" href="#">Como Usar</a>
+                        <a class="nav-link active" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#howToModal">
+                            Como Usar
+                        </a>
                     </li>
                     
                     <li class="nav-item">
@@ -34,11 +36,15 @@
                     </li>
                    
                     <li class="nav-item">
-                        <a class="nav-link disabled" aria-current="page" href="#">Notas de Atualizações</a>
+                        <a class="nav-link disabled" aria-current="page" href="#" data-bs-target="modal" data-bs-target="#updatesModal">
+                            Notas de Atualizações
+                        </a>
                     </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link disabled" aria-current="page" href="#">Sobre</a>
+                        <a class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#aboutModal">
+                            Sobre
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -47,13 +53,71 @@
     
     <!-- ----------------------------------------------------------------------------------- -->
     <!-- Corpo -->
-    <main id="main-main max-vw-100">
-        <div class="image-background"><div class="image-foreground"></div></div>
+    <main id="main-main" class="max-vw-100">
+        <div id="image-background"><div id="image-foreground"></div></div>
         <!-- <div id="liveAlertPlaceholder"></div> -->
         <div id="content"></div>
     </main>
     
     <!-- ----------------------------------------------------------------------------------- -->
+    <!-- ----------------------------------------------------------------------------------- -->
+    <!-- How to Use Modal -->
+    <div class="modal fade" id="howToModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="errorModalLabel">Como Usar</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Este site, <i>Poder Supremo - Leitor de Fichas Online</i>, tem a funcionalidade de permitir você carregar suas fichas para poder visualizá-las em qualquer lugar que estiver, permitindo várias formas de extração e visualização das mesmas, como também o tracker de combate, para fazer controle de combate entre vários personagens.</p>
+                    <p>Uma vez que ele é um site <i>companion</i> para a aplicação original, você precisa dela para a criação das fichas. O <i><b>Poder Supremo</b></i> pode ser baixado no link a seguir: </p>
+                    <p>• <a href="https://superbrego.itch.io/poder-supremo">https://superbrego.itch.io/poder-supremo</a></p>
+                    <p>Para começar tudo, primeiro carregue o portfólio clicando no botão do início da página.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="errorModalLabel">Sobre</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Este site foi desenvolvido por Bernardo Rego (usuários <i>GodsCorpse</i>, <i>SuperBrego</i> e <i>Regonalta</i>, em diversas redes), usando a HTML, CSS e Javascript, com o auxílio da ferramenta <i>Bootstrap</i> para criação dos layouts.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Updates -->
+    <div class="modal fade" id="updatesModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="errorModalLabel">Como Usar</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Este site foi desenvolvido por Bernardo Rego (usuários <i>GodsCorpse</i>, <i>SuperBrego</i> e <i>Regonalta</i>, em diversas redes), usando a HTML, CSS e Javascript, com o auxílio da ferramenta <i>Bootstrap</i> para criação dos layouts.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Error Modal -->
     <div class="modal fade" id="load-error-modal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -63,7 +127,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Você parece estar usando um portfólio com fichas de uma versão antiga do <b><i>Poder Supremo</i></b>. Confira se o mesmo está em uma versão igual ou acima da 1.10.0 (em <i>Ajuda → Versão</i>)</p>
+                    <p>Você parece estar usando um portfólio com fichas de uma versão antiga do <b><i>Poder Supremo</i></b>. Confira se o mesmo está em uma versão igual ou acima da 1.11.3 (em <i>Sobre → Versão</i>)</p>
                     <p>Você não precisa fazer uma ficha nova do zero para poder usar o site: apenas abra o arquivo novamente e o salve com essa nova versão que automaticamente ele incluirá os dados necessários para carregá-lo aqui.</p>
                 </div>
                 <div class="modal-footer">
@@ -74,8 +138,9 @@
     </div>
     
     <script src="scripts/alerts.js"></script>
-    <script src="scripts/navigation.js"></script>
     <script src="scripts/findInPort.js"></script>
+    <script src="scripts/navigation.js"></script>
+    <script src="scripts/Sheets Renders/MarvelSheetRender.js"></script>
     <script src="scripts/render.js"></script>
     <script src="scripts/main.js"></script>
 </body>

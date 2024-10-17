@@ -6,11 +6,13 @@ function navigateTo(page) {
 
     // Alterar o conteúdo dinamicamente
     if (page === 'fichas') {
-        contentDiv.innerHTML = renderSheetList(portfolio);
-    } else if (page === 'exportacao') {
+        contentDiv.innerHTML = renderSheetList(currentPortfolio);
+    } 
+    else if (page === 'exportacao') {
         contentDiv.innerHTML = renderExportOptions();
-    } else if (page === 'tracker') {
-        contentDiv.innerHTML = renderCombatTracker(portfolio);
+    } 
+    else if (page === 'tracker') {
+        contentDiv.innerHTML = renderCombatTracker(currentPortfolio);
     }
 
     // Atualizar URL (opcional)
