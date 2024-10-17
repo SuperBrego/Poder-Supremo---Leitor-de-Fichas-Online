@@ -139,6 +139,7 @@ function renderMarvelPowers(powers, container) {
     for(let power of powerList) {
         powerBlock = document.createElement('div');
         powerBlock.className = 'power-block';
+        if(power.isAlternateEffect) powerBlock.className += ` alternate-power`;
         
         powerHeader = document.createElement('header');
 
@@ -169,19 +170,25 @@ function renderMarvelPowers(powers, container) {
     if(leftovers > 0) {
         blocks = blocks.splice(maxBlocks)
         maxBlocks = countPowerBlocksWithStrictOverflow(page2Container, blocks);
-        
         // console.log(`Você pode adicionar ${maxBlocks} blocos antes de causar overflow, sobrando ${blocks.length - maxBlocks}.`);
+        leftovers = blocks.length - maxBlocks;
     }
     
-    if(leftovers === 0) return;
+    if((leftovers === 0) ) return;
     
-    let powerPage, powerListElement;
+    let powerPage, powerPageHeader, powerListElement;
     while(leftovers > 0) {
         powerPage = document.createElement('div');
         powerPage.className = 'a4-page p-5';
+        
+        powerPageHeader = document.createElement('h3');
+        powerPageHeader.innerHTML = 'Poderes';
+        powerPage.appendChild(powerPageHeader);
+        
         powerListElement = document.createElement('div');
         powerListElement.className = 'power-listing';
         powerPage.appendChild(powerListElement);
+        
         
         container.appendChild(powerPage);
         blocks = blocks.splice(maxBlocks)

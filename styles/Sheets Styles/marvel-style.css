@@ -4,9 +4,9 @@
 /* *************** */
 .marvel-character-sheet {
     position: relative;
-
+    
     --displayScale: .7;
-
+    
     .a4-page {
         transform: scale(var(--displayScale));
         transform-origin: top left;
@@ -25,12 +25,13 @@
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
+    justify-items: flex-start;
+
     /* gap: 10mm; */
     gap: 1mm;
     font-size: 14px;;
     
-    justify-items: flex-start;
-    background: no-repeat url(../images/marvel-background.jpg);
+    background: no-repeat url(../../images/marvel-background.jpg);
     background-size: cover;
     page-break-after: always;
 }
@@ -50,28 +51,18 @@
 /* ******************************************* */
 /* Todos os corpos */
 /* ******************************************* */
-#image-header { 
-    padding: 0 1rem; 
-}
+#image-header { padding: 0 1rem; }
 
 #abilities, #defenses-powers, #skillsAdvs-powers {
     padding: 0 2rem;
 }
 
-#skills-advs {
-    padding: 1rem 0;
-}
+#skills-advs { padding: 1rem 0; }
 
-#skills, #advantages {
-    padding: 1rem .5rem;
-}
+#skills, #advantages { padding: 1rem .5rem; }
 
-#power-list-page1 {
-    padding: 0 1rem;
-}
-#power-list-page2 {
-    padding: 1rem 0;
-}
+#power-list-page1 { padding: 0 1rem; }
+#power-list-page2 { padding: 1rem 0; }
 
 /* ******************************************* */
 /* Habilidades */
@@ -124,7 +115,7 @@
     border-right-width: 1px;
     border-right-style: solid;
     border-image: linear-gradient(#00000000, #999 ,#00000000) 30;
-
+    
     display: flex;
     flex-direction: column;
     gap: 5%;
@@ -171,16 +162,13 @@
 /* ******************************************* */
 /* Vantagens */
 /* ******************************************* */
-/* #advantages {
-    
-} */
 
 /* ******************************************* */
 /* Poderes */
 /* ******************************************* */
 .power-listing {
-    display: grid;
-    /* grid-template-columns: repeat(2, 50%); */
+    display: flex;
+    flex-direction: column;
     height: 100%;
 }
 
@@ -189,15 +177,26 @@
     flex-direction: column;
     align-items: flex-start;
     height: fit-content;
+    
+    header {
+        font-size: 18px;
+        color: #4f84e7;
+        font-weight: bold;
+    }
+    
+    b {
+        color: goldenrod;
+    }
+    
+    p { 
+        font-size: .7rem;
+    }
 }
-.power-block header {
-    font-size: 18px;
-    color: #4f84e7;
-    font-weight: bold;
-}
-.power-block b {
-    color: goldenrod;
-}
-.power-block p {
-    font-size: .7rem;
+
+.alternate-power {
+    padding-left: 1rem;
+
+    header {
+        font-size: 14px;
+    }
 }
