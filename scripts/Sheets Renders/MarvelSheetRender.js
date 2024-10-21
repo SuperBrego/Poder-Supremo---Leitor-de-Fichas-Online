@@ -124,8 +124,6 @@ function renderMarvelAbility(ability, index) {
     return abilitiyCircle.outerHTML;
 }
 
-
-
 /**
 * Renderiza os Poderes do personagem, dinamicamente criando novas páginas caso haja poderes demais.
 * @param {Power[]} powers Lista de Poderes do Personagem.
@@ -206,4 +204,8 @@ function renderMarvelPowers(powers, container) {
         maxBlocks = countPowerBlocksWithStrictOverflow(powerListElement, blocks);
         leftovers = blocks.length - maxBlocks;
     }
+}
+
+function renderMarvelAttacks(attacks, container) {
+
 }

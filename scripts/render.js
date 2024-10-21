@@ -26,9 +26,8 @@ function renderHome() {
 
 /**
 * Renderiza, em cards, todas as fichas dentro do portfólio.
-* @param {Portfolio} portfolioData 
 */
-function renderSheetList(portfolioData) {
+function renderSheetList() {
     let cardBlock = document.createElement('div');
     cardBlock.className = 'content-fluid d-flex justify-content-center mt-2 p-2 row-gap-2 column-gap-3 flex-wrap card-block';
     
@@ -37,8 +36,8 @@ function renderSheetList(portfolioData) {
     returnBtn.innerHTML = '← Retornar';
     returnBtn.addEventListener('click', () => { renderHome() });
     
-    for(let index = 0; index < portfolioData.length; index++) {
-        cardBlock.insertAdjacentHTML('beforeend', CharacterChard(portfolioData[index], index));
+    for(let index = 0; index < currentPortfolio.length; index++) {
+        cardBlock.insertAdjacentHTML('beforeend', CharacterChard(currentPortfolio[index], index));
     }
     mainContent.innerHTML = '';
     mainContent.appendChild(returnBtn);
@@ -50,7 +49,7 @@ function renderSheetList(portfolioData) {
             // Pega o índice do data-index do botão
             const index = button.getAttribute('data-index');
             // Recupera o personagem do mapa usando o índice
-            const character = portfolioData[Number(index)];
+            const character = currentPortfolio[Number(index)];
             // Chama a função renderCharacterSheet com o personagem correspondente
             renderCharacterSheet(character);
         });
@@ -119,11 +118,11 @@ function renderCharacterSheet(character) {
     btnGroup.setAttribute('role', 'group');
     
     //      Voltar para Home.
-    const returnBtn = document.createElement('button');
-    returnBtn.className = 'btn btn-primary';
-    returnBtn.innerHTML = '← Retornar';
+    const returnSheetList = document.createElement('button');
+    returnSheetList.className = 'btn btn-primary';
+    returnSheetList.innerHTML = '← Retornar';
     // ***************************************** ↓ mudar aqui, temos que voltar aos cards.
-    returnBtn.addEventListener('click', () => { renderHome() });    
+    returnSheetList.addEventListener('click', () => { renderSheetList() });    
     
     //      Salvar a Ficha
     const saveBtn = document.createElement('button');
@@ -139,7 +138,7 @@ function renderCharacterSheet(character) {
     widenBtn.addEventListener('click', () => wideContractSheet());
     
     // Add botões
-    btnGroup.appendChild(returnBtn);
+    btnGroup.appendChild(returnSheetList);
     btnGroup.appendChild(saveBtn);
     btnGroup.appendChild(widenBtn);
     
@@ -183,9 +182,9 @@ function renderCharacterSheet(character) {
     }, 3000);
     
     /**
-     * Esse código abaixo é ainda necessário porque o handleResize não pega direitinho 
-     * antes do componente estar 100% renderizado.
-     */
+    * Esse código abaixo é ainda necessário porque o handleResize não pega direitinho 
+    * antes do componente estar 100% renderizado.
+    */
     // Padrão .6
     let scaleOffset = .6;
     setTimeout(() => {
@@ -258,7 +257,7 @@ function handleResize() {
 function renderSheetTemplate(index, character, container) {
     switch(index) {
         default:
-        case 0: renderMarvelPowers(character.data.powers, container)
+        case 0: renderMarvelPowers(character.data.powers, container);
         return 'marvel-character-sheet';
     }
 }
@@ -269,11 +268,8 @@ function renderCombatTracker() {}
 
 
 // **********************************************************************
-// **********************************************************************
 // Componentes Padrões
 // **********************************************************************
-// **********************************************************************
-
 /**
 * Renderiza, em string, a Vantagem do personagem.
 * @param {FeatData} feat Vantagem a ser renderizada.
@@ -293,9 +289,7 @@ function renderDefaultFeat(feat) {
 */
 function renderDefaultPower(power) {
     
-    // Abrir Parênteses
-    let hasBenefits = power.powerBenefits.length > 0;
-    
+    // Abrir Parênteses    
     let isDynamic = power.isDynamicEffect;
     let hasAffectedTrait = (power.affectedTrait !== "" && power.affectedTrait !== "Nenhum");
     let hasResistedBy = (power.resistedBy !== "" && power.resistedBy !== "Nenhum");
@@ -336,68 +330,68 @@ function renderDefaultPower(power) {
             ${power.powerOptions.map((pwrOpt) => `
                 ${pwrOpt.name}${pwrOpt.rank !== 1 ? ` ${pwrOpt.rank}` : ''}
                 ${pwrOpt.traitText.length > 0 ? ` [${pwrOpt.traitText}]` : ''}
-            `).join(', ')}`);
-        }
-        
-        // É Aflição
-        if(power.overcomedBy) {
-            details.push(`<span><b>Superador por</b>: ${power.overcomedBy}</span>`);
-            if(power.variableDegree === 4) details.push(`Todas Condições Variáveis`);
-            else {
-                if(hasFirstDegree || power.variableDegree === 1) {
-                    details.push(`<b>1º Grau:</b> ${(power.variableDegree === 1) ? 'Variável' : `${power.firstDegree}`}`);
-                }
-                
-                if((hasSecondDegree || power.variableDegree === 2) && power.limitedDegree < 2) {
-                    details.push(`<b>2º Grau:</b> ${(power.variableDegree === 2) ? 'Variável' : `${power.secondDegree}`}`);
-                }
-                
-                if((hasThirdDegree || power.variableDegree === 3) && power.limitedDegree < 1) {
-                    details.push(`<b>3º Grau:</b> ${(power.variableDegree === 2) ? 'Variável' : `${power.thirdDegree}`}`);
-                }
+            `).join(', ')}`
+        );
+    }
+    
+    // É Aflição
+    if(power.overcomedBy) {
+        details.push(`<span><b>Superador por</b>: ${power.overcomedBy}</span>`);
+        if(power.variableDegree === 4) details.push(`Todas Condições Variáveis`);
+        else {
+            if(hasFirstDegree || power.variableDegree === 1) {
+                details.push(`<b>1º Grau:</b> ${(power.variableDegree === 1) ? 'Variável' : `${power.firstDegree}`}`);
             }
             
+            if((hasSecondDegree || power.variableDegree === 2) && power.limitedDegree < 2) {
+                details.push(`<b>2º Grau:</b> ${(power.variableDegree === 2) ? 'Variável' : `${power.secondDegree}`}`);
+            }
+            
+            if((hasThirdDegree || power.variableDegree === 3) && power.limitedDegree < 1) {
+                details.push(`<b>3º Grau:</b> ${(power.variableDegree === 2) ? 'Variável' : `${power.thirdDegree}`}`);
+            }
         }
         
-        // Modificadores Fixos
-        if(hasFlats) details.push(`<b>Fixos:</b> ${power.flats.map((elem) => renderDefaultModifier(elem, true)).join(', ')}`);
-        
-        // Modificadores Extras
-        if(hasExtras) details.push(`<b>Extras:</b> ${power.extras.map((elem) => renderDefaultModifier(elem, false)).join(', ')}`);
-        
-        // Modificadores Falhas
-        if(hasFlaws) details.push(`<b>Falhas:</b> ${power.flaws.map((elem) => renderDefaultModifier(elem, false)).join(', ')}`);
-        
-        // <PSSModifierRender modifier={elem} isExtra={elem.extra} isFlat={true} />
-        
-        // Modificações
-        if(hasEnhancements) {
-            details.push(`<b>Modificações</b>: ${power.enhancedTraits.map((elem) => `${elem.trait} ${elem.rank}`)}`);
-        }
-        
-        if(hasEnhancedAdvantages) {
-            details.push(`<b>Vantagens</b>: ${power.enhancedAdvantages.map((elem) => renderDefaultFeat(elem)).join(', ')}`);
-        }
-        
-        // Descritores
-        if(hasDescriptors) details.push(`<b>Descritores</b>: ${power.descriptors.map((elem) => `${elem}`).join(', ')}`);
-        
-        return `
+    }
+    
+    // Modificadores Fixos
+    if(hasFlats) details.push(`<b>Fixos:</b> ${power.flats.map((elem) => renderDefaultModifier(elem, true)).join(', ')}`);
+    
+    // Modificadores Extras
+    if(hasExtras) details.push(`<b>Extras:</b> ${power.extras.map((elem) => renderDefaultModifier(elem, false)).join(', ')}`);
+    
+    // Modificadores Falhas
+    if(hasFlaws) details.push(`<b>Falhas:</b> ${power.flaws.map((elem) => renderDefaultModifier(elem, false)).join(', ')}`);
+    
+    // <PSSModifierRender modifier={elem} isExtra={elem.extra} isFlat={true} />
+    
+    // Modificações
+    if(hasEnhancements) {
+        details.push(`<b>Modificações</b>: ${power.enhancedTraits.map((elem) => `${elem.trait} ${elem.rank}`)}`);
+    }
+    
+    if(hasEnhancedAdvantages) {
+        details.push(`<b>Vantagens</b>: ${power.enhancedAdvantages.map((elem) => renderDefaultFeat(elem)).join(', ')}`);
+    }
+    
+    // Descritores
+    if(hasDescriptors) details.push(`<b>Descritores</b>: ${power.descriptors.map((elem) => `${elem}`).join(', ')}`);
+    
+    return `
         ${power.effect} ${power.strengthBased ? ' baseado em Força' : ''} ${power.showRank ? `${power.rank}` : ''}
         ${details.length > 0 ? `(${details.map(elem => `${elem}`).join('. ')})` : ''}
     `;
-    }
-    
-    /**
-    * Renderiza Modificador de Poder.
-    * @param {ModifierData} modifier Modificador a ser renderizado.
-    * @param {boolean} isFlat Se o Modificador é Fixo ou Extra/Falha por Graduação.
-    * @returns {string}
-    */
-    function renderDefaultModifier(modifier, isFlat) {
-        return `
+}
+
+/**
+* Renderiza Modificador de Poder.
+* @param {ModifierData} modifier Modificador a ser renderizado.
+* @param {boolean} isFlat Se o Modificador é Fixo ou Extra/Falha por Graduação.
+* @returns {string}
+*/
+function renderDefaultModifier(modifier, isFlat) {
+    return `
         ${modifier.name} ${(modifier.extra) ? `+${modifier.rank}` : `-${modifier.rank}`}${!(isFlat) ? `/grad` : '/fixo'}
         ${modifier.hasTrait ? `[${modifier.traitText}]` : ''}
     `;
-        
-    }
+}

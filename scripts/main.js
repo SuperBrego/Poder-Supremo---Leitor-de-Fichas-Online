@@ -32,7 +32,10 @@ function handleFileUpload(event) {
     }
 }
 
-// Função para verificar as propriedades no JSON
+/**
+* 
+* @param {portfolio} portfolio 
+*/
 function characterTest(portfolio) {
     let portfolioData = getPortData(portfolio);
     
@@ -43,13 +46,16 @@ function characterTest(portfolio) {
         }
     }
     
-    currentPortfolio = portfolio;
+    currentPortfolio = portfolioData;
     
-    renderSheetList(portfolioData);
+    renderSheetList();
 }
 
+/**
+* 
+*/
 function saveToPDF() {
-
+    
     const options = {
         margin: [0, 0, 0, 0], // Remove margens
         filename: `Ficha de Personagem.pdf`,
@@ -57,9 +63,9 @@ function saveToPDF() {
         pageBreak: { mode: 'css' },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     };
-
+    
     let sheetExport = document.createElement('div');
-
+    
     let clonedNode;
     let sheets = Array.from(document.querySelectorAll(`#sheet-container .a4-page`));
     console.log(sheets)
@@ -87,11 +93,11 @@ function saveToPDF() {
 }
 
 /**
- * Recebe uma lista de poderes e "espalha" ela: coloca Poderes de Múltiplos Poderes e 
- * Efeitos Alternativos lado a lado dos poderes "pai".
- * @param {Power[]} powers Lista de Poderes.
- * @returns {Power[]} Lista de poderes "espalhada."
- */
+* Recebe uma lista de poderes e "espalha" ela: coloca Poderes de Múltiplos Poderes e 
+* Efeitos Alternativos lado a lado dos poderes "pai".
+* @param {Power[]} powers Lista de Poderes.
+* @returns {Power[]} Lista de poderes "espalhada."
+*/
 function spreadPowers(powers) {
     const spreadArray = [];
     
@@ -122,12 +128,12 @@ function spreadPowers(powers) {
 }
 
 /**
- * Adiciona dinamicamente elementos HTML enquanto não há quebra de overflow. 
- * Informa quantos elementos podem ser adicionados antes.
- * @param {HTMLElement} container Espaço onde será adicionado elementos HTML.
- * @param {HTMLElement[]} blocks Elementos que serão adicionados e colocados à teste.
- * @returns {number}
- */
+* Adiciona dinamicamente elementos HTML enquanto não há quebra de overflow. 
+* Informa quantos elementos podem ser adicionados antes.
+* @param {HTMLElement} container Espaço onde será adicionado elementos HTML.
+* @param {HTMLElement[]} blocks Elementos que serão adicionados e colocados à teste.
+* @returns {number}
+*/
 function countPowerBlocksWithStrictOverflow(container, blocks) {
     let count = 0;
     let totalHeight = 0;
