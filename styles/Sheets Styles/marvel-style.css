@@ -1,24 +1,25 @@
 
-/* *************** */
-/*  */
-/* *************** */
+/* ************************* */
+/* Container das Páginas */
+/* ************************* */
 .marvel-character-sheet {
     position: relative;
     
-    --displayScale: .7;
+    /* --displayScale: .63; */
+    gap: 1mm;
     
     .a4-page {
-        transform: scale(var(--displayScale));
+        /* transform: scale(var(--displayScale)); */
         transform-origin: top left;
         position: absolute;
-        /* top: 0; */
         left: 0;
     }
 }
 
+/* Estrutura das Páginas */
 .a4-page {
     width: 210mm;
-    height: 278mm; /* 278mm é a altura do A4 caber em uma página do jsPDF */ 
+    height: 296.5mm; /**/
     background-color: #eee;
     color: #111;
     margin: 0 auto;
@@ -27,7 +28,6 @@
     flex-direction: column;
     justify-items: flex-start;
 
-    /* gap: 10mm; */
     gap: 1mm;
     font-size: 14px;;
     
@@ -36,20 +36,52 @@
     page-break-after: always;
 }
 
-#image-header {
-    height: 25%;
+/* **************** */
+/* Cabeçalho */
+/* **************** */
+#marvel-header {
+    height: calc(296.5mm * .25);
     width: 100%;
-    background-size: cover;
+}
+
+#marvel-header-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: calc(296.5mm * .25);
+    width: 100%;
+    /* z-index: -1; */
+    background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
 }
-.character-title {
-    color: #eee;
-    background-color: #1111111e;
+
+#marvel-header-foreground {
+    position: relative;
+    height: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* ******************************************* */
-/* Todos os corpos */
+.character-titles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.character-title {
+    font-size: 10mm;
+    color: #eee;
+    background-color: rgba(1, 1, 1, .8);
+    padding: .25rem .5rem;
+}
+
+/* ******************************************* */
+/* Padding para cada corpo */
 /* ******************************************* */
 #image-header { padding: 0 1rem; }
 
@@ -57,10 +89,8 @@
     padding: 0 2rem;
 }
 
-#skills-advs { padding: 1rem 0; }
-
+#skills-advs { padding: 1rem .25rem; }
 #skills, #advantages { padding: 1rem .5rem; }
-
 #power-list-page1 { padding: 0 1rem; }
 #power-list-page2 { padding: 1rem 0; }
 
@@ -70,8 +100,9 @@
 #abilities {
     display: flex;
     gap: 5px;
+    
+    .abi-circle { top: -50px; }
 }
-#abilities .abi-circle { top: -50px; }
 
 .abi-circle {
     width: 100px;
@@ -114,7 +145,8 @@
 #defenses {
     border-right-width: 1px;
     border-right-style: solid;
-    border-image: linear-gradient(#00000000, #999 ,#00000000) 30;
+    border-color: #999;
+    /* border-image: linear-gradient(#00000000, #999 ,#00000000) 30; */
     
     display: flex;
     flex-direction: column;
@@ -130,8 +162,6 @@
 /* ******************************************* */
 #skillsAdvs-powers {
     display: flex;
-    /* justify-content: center; */
-    /* align-items: flex-start; */
     height: 90%;
 }
 
@@ -141,7 +171,9 @@
     
     border-left-width: 1px;
     border-left-style: solid;
-    border-image: linear-gradient(#00000000, #999 ,#00000000) 30;
+    border-color: #999;
+    margin-top: 1rem;
+    /* border-image: linear-gradient(#00000000, #999 ,#00000000) 30; */
 }
 
 #skills {
@@ -149,10 +181,11 @@
     grid-template-columns: 70% repeat(2, 15%);
     gap: 10px;
     width: 100%;
-}
-#skills > header:nth-child(-n+3){
-    font-weight: bold;
-    font-size: 14px;
+
+    > header:nth-child(-n+3){
+        font-weight: bold;
+        font-size: 14px;
+    }
 }
 
 .skill-rank, .skill-total {
@@ -184,17 +217,19 @@
         font-weight: bold;
     }
     
-    b {
-        color: goldenrod;
-    }
-    
     p { 
         font-size: .7rem;
     }
 }
 
-.alternate-power {
+.gold-bold {
+    font-weight: bold;
+    color: darkgoldenrod;
+}
+
+.child-power, .alternate-power {
     padding-left: 1rem;
+    padding-right: 1rem;
 
     header {
         font-size: 14px;

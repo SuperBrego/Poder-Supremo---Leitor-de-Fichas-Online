@@ -103,3 +103,14 @@ main {
     background: #f1f1f1; /* Cor do trilho */
     border-radius: 6px; /* Bordas arredondadas */
 }
+
+/* ********************************* */
+/* Container da Ficha */
+/* ********************************* */
+#sheet-container {
+    margin-left: 1rem;
+    height: 80%;
+    min-width: 450px;
+    max-width: 40%;
+    overflow-y: auto;
+}

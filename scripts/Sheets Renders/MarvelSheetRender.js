@@ -2,43 +2,34 @@
 // Ficha Modelo Marvel
 // ***************************************
 /**
- * 
- * @param {{data: MnMCharacterData, gallery: string[]}} character 
- * @return {string}
- */
+* Componente que renderiza a ficha de Personagem, modelo Marvel.
+* @param {{data: MnMCharacterData, gallery: string[]}} character Personagem a ser renderizado.
+* @return {string} HTMLElement como string.
+*/
 function renderMarvelCharacterSheet(character) {
     let charData = character.data;
-
+    
     let headerImage = new Image();
     headerImage.src = character.gallery[0];
-
-    let headerStyling = '';
-
-    const imageWidth = headerImage.width;
-    const imageHeight = headerImage.height;
-    headerStyling += `background-image: url(${headerImage.src});`;
     
-    // Determina se a imagem é paisagem ou retrato
-    if (imageWidth > imageHeight) {
-        // console.log("A imagem é em formato paisagem.");
-        headerStyling += `background-size: cover;` // Configura como cover
-        headerStyling += `width: 100%;`
-    } else if (imageHeight > imageWidth) {
-        // console.log("A imagem é em formato retrato.");
-        headerStyling += `background-size: contain;` // Configura como contain
-        headerStyling += `width: 25%;`
-    } else {
-        // console.log("A imagem é quadrada.");
-        headerStyling += `background-size: cover;` // Ou qualquer outra configuração desejada
-        headerStyling += `width: 25%;`
-    }
-
+    let bgHeaderStyle = '';
+    bgHeaderStyle += `background-image: url(${headerImage.src});`;
+    bgHeaderStyle += `background-size: cover;`;
+    
+    let forebgHeaderStyle = '';
+    forebgHeaderStyle += `background-image: url(${headerImage.src});`;
+    
     let page1 = `
     <link rel="stylesheet" href="styles/Sheets Styles/marvel-style.css">
     <div class="a4-page">
         
-        <header id="image-header" style="${headerStyling}">
-            <h1><span class="character-title">${charData.name}</span></h1>
+        <header id="marvel-header">
+            <div id="marvel-header-background" style="${bgHeaderStyle}"></div>
+            <div id="marvel-header-foreground" style="${forebgHeaderStyle}"></div>
+            <div class="character-titles d-flex">
+                <div><span class="character-title">${charData.name}</span></div>
+                <div><span class="character-title">NP ${charData.powerLevel}</span></div>
+            </div>
         </header>
         
         <!-- Habilidades -->
@@ -50,7 +41,7 @@ function renderMarvelCharacterSheet(character) {
         <div id="defenses-powers">
             <div id="defenses" class="col-3 text-center">
                 <header><h3>Defesa</h3></header>
-
+    
                 ${charData.defenses.map(defense => `
                     <div class="defItem">
                         <header>${defense.name}</header>
@@ -58,7 +49,9 @@ function renderMarvelCharacterSheet(character) {
                     </div>
                 `).join("")}
             </div>
-            <div id="power-list-page1" class="power-listing"></div>
+            <div id="power-list-page1" class="power-listing">
+                <h3>Poderes</h3>
+            </div>
         </div>
     </div>`;
     
@@ -69,7 +62,9 @@ function renderMarvelCharacterSheet(character) {
         
         <div id="skillsAdvs-powers">
             <!-- Lista de Poderes -->
-            <div id="power-list-page2" class="power-listing col-7"></div>
+            <div id="power-list-page2" class="power-listing col-7">
+                <h3>Cont. Poderes</h3>
+            </div>
             
             <!-- Perícias/Vantagens -->
             <aside id="skills-advs">
@@ -90,20 +85,26 @@ function renderMarvelCharacterSheet(character) {
                 <!-- Vantagens -->
                 <div id="advantages">
                     <h3>Vantagens</h3>
-                    <p>${charData.advantages.map(elem => renderMarvelAdv(elem)).join(", ")}</p>
+                    <p>${charData.advantages.map(elem => renderDefaultFeat(elem)).join(", ")}</p>
                 </div>
             </aside>
         </div>
     </div>
     `;
-
+    
     return `${page1}${page2}`;
 }
 
+/**
+* Renderiza Habilidade de personagem em círculos.
+* @param {ability} ability Habilidade a ser renderizada.
+* @param {number} index Index da Habilidade, para seleção de cores.
+* @returns {string} HTMLElement em string.
+*/
 function renderMarvelAbility(ability, index) {
     const colors = ['red', 'orange', 'blue', 'green', 'purple', 'grey', 'darkred', 'darkgold'];
     let abilitiyCircle, abiRank, abiName;
-
+    
     abilitiyCircle = document.createElement('div');
     abilitiyCircle.className = 'abi-circle';
     abilitiyCircle.style.borderColor = `${colors[index]}`;
@@ -119,42 +120,52 @@ function renderMarvelAbility(ability, index) {
     abiName.className = 'abi-name';
     abiName.innerHTML = `${ability.abrev}`;
     abilitiyCircle.appendChild(abiName);
-
+    
     return abilitiyCircle.outerHTML;
 }
 
-function renderMarvelAdv(advantage) {
-    let advTxt = advantage.name;
-    if(advantage.rank > 1) advTxt += ` ${advantage.rank}`;
-    if(advantage.trait && advantage.trait.length > 1) advTxt += ` (${advantage.trait})`;
-    return advTxt;
-}
 
+
+/**
+* Renderiza os Poderes do personagem, dinamicamente criando novas páginas caso haja poderes demais.
+* @param {Power[]} powers Lista de Poderes do Personagem.
+* @param {HTMLElement} container Elemento HTML onde a ficha está localizada.
+*/
 function renderMarvelPowers(powers, container) {
     let powerList = spreadPowers(powers);
-
+    
     var blocks = [];
     let powerBlock, powerHeader, powerDescription;
-
+    
     for(let power of powerList) {
         powerBlock = document.createElement('div');
         powerBlock.className = 'power-block';
+        // Se for poder dentro de Múltiplos Poderes...
+        if(power.name.includes('>', 0)) {
+            powerBlock.className += ` child-power`;
+            let paddingCount = power.name.split('>').length - 1;
+            powerBlock.style.paddingLeft = `${paddingCount * 1.75}rem`
+        }
+        
+        // Se for poder alternativo...
         if(power.isAlternateEffect) powerBlock.className += ` alternate-power`;
         
-        powerHeader = document.createElement('header');
-
-        let headerTxt = `${power.name}`;
+        let alternativeNameHeader = (power.isAlternateEffect) ? ((power.IsDynamicEffect) ? 'EAD: ' : 'EA: ') : '';
+        let headerTxt = `${alternativeNameHeader}${power.name}`;
         if(power.showRank) headerTxt += ` ${power.rank}`;
+
+        powerHeader = document.createElement('header');
         powerHeader.innerHTML = headerTxt;
         powerBlock.appendChild(powerHeader);
         
-        powerDescription = document.createElement('p');
-        if(power.description.length > 0) powerDescription.innerHTML = `<b>Drama:</b> ${power.description}`
-        else powerDescription.innerHTML = '<b>Drama:</b> <i>Resuminho do poder como ele é no jogo e como deve ser interpretado.</i>';
-        powerBlock.appendChild(powerDescription);
+        if(power.description.length > 0) {
+            powerDescription = document.createElement('p');
+            powerDescription.innerHTML = `<span class="gold-bold">Drama:</span> ${power.description}`
+            powerBlock.appendChild(powerDescription);
+        }
         
         powerDescription = document.createElement('p');
-        powerDescription.innerHTML = '<b>Trama:</b> Como são os efeitos que compoem o poder e seus custos';
+        powerDescription.innerHTML = `<span class="gold-bold">Mecânica:</span> ${renderDefaultPower(power)}`;
         powerBlock.appendChild(powerDescription);
         
         blocks.push(powerBlock);
@@ -182,7 +193,7 @@ function renderMarvelPowers(powers, container) {
         powerPage.className = 'a4-page p-5';
         
         powerPageHeader = document.createElement('h3');
-        powerPageHeader.innerHTML = 'Poderes';
+        powerPageHeader.innerHTML = 'Cont. Poderes';
         powerPage.appendChild(powerPageHeader);
         
         powerListElement = document.createElement('div');
@@ -194,6 +205,5 @@ function renderMarvelPowers(powers, container) {
         blocks = blocks.splice(maxBlocks)
         maxBlocks = countPowerBlocksWithStrictOverflow(powerListElement, blocks);
         leftovers = blocks.length - maxBlocks;
-        // console.log(`Você pode adicionar ${maxBlocks} blocos antes de causar overflow, sobrando ${blocks.length - maxBlocks}.`);
     }
 }
