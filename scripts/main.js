@@ -118,7 +118,7 @@ function spreadPowers(powers) {
         if (power.alternativeEffects) {
             const alternativePowers = spreadPowers(power.alternativeEffects).map((alternative) => ({
                 ...alternative,
-                name: `${alternative.name}`,
+                name: `> ${alternative.name}`,
             }));
             spreadArray.push(...alternativePowers);
         }
@@ -128,11 +128,35 @@ function spreadPowers(powers) {
 }
 
 /**
+* Espalha os Equipamentos em uma única lista, tirando de campos de poderes e lista de equipamentos.
+* @param {EquipmentData[]} equipments Lista de Equipamentos
+* @returns {EquipmentData[]}
+*/
+function spreadEquipments(equipments) {
+    const spreadArray = [];
+    
+    equipments.forEach((equipment) => {
+        // Adiciona o poder principal
+        spreadArray.push(equipment);
+        
+        // Se existirem efeitos alternativos, chama a função recursivamente
+        if (equipment.equipList) {
+            const extraEquips = spreadEquipments(equipment.equipList).map((equip) => ({
+                ...equip,
+                name: `> ${equip.name}`,
+            }));
+            spreadArray.push(...extraEquips);
+        }
+    });
+    
+    return spreadArray;
+}
+
+/**
 * Adiciona dinamicamente elementos HTML enquanto não há quebra de overflow. 
-* Informa quantos elementos podem ser adicionados antes.
 * @param {HTMLElement} container Espaço onde será adicionado elementos HTML.
 * @param {HTMLElement[]} blocks Elementos que serão adicionados e colocados à teste.
-* @returns {number}
+* @returns {number} O quantos de elementos que podem ser adicionados antes de dar overflow.
 */
 function countPowerBlocksWithStrictOverflow(container, blocks) {
     let count = 0;
@@ -164,14 +188,21 @@ function countPowerBlocksWithStrictOverflow(container, blocks) {
     return count;
 }
 
-function isOutOfParent(container, element) {
-    const elementRect = element.getBoundingClientRect();
-    const parentRect = container.getBoundingClientRect();
+/**
+ * Informa, em porcentagem, quanto tem espaço livre em um determinado elemento HTML.
+ * @param {HTMLElement} container Elemento HTML com conteúdo.
+ * @returns {number}
+*/
+function calculateRemainingSpacePercentage(container) {
+    const containerHeight = container.getBoundingClientRect().height;
+    let usedHeight = 0;
     
-    return (
-        elementRect.bottom > parentRect.bottom
-        || elementRect.top < parentRect.top 
-        || elementRect.left < parentRect.left
-        || elementRect.right > parentRect.right
-    );
+    // Calcular a altura total ocupada pelos filhos do contêiner
+    Array.from(container.children).forEach(child => {
+        usedHeight += child.getBoundingClientRect().height;
+    });
+    
+    // Calcular a porcentagem de espaço restante
+    const remainingSpace = containerHeight - usedHeight;
+    return (remainingSpace / containerHeight) * 100;
 }

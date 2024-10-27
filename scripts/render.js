@@ -1,5 +1,7 @@
 const mainContent = document.getElementById('content');
 const imageForeground = document.getElementById('image-foreground');
+var currentCharacter = {};
+var currentIndex = 0;
 
 var isWideSheet = false;
 
@@ -9,6 +11,8 @@ var isWideSheet = false;
 * do portfólio.
 */
 function renderHome() {
+    currentCharacter = {};
+    
     imageForeground.style.backgroundColor = `rgba(0, 0, 0, .80)`;
     
     mainContent.innerHTML = `
@@ -51,64 +55,21 @@ function renderSheetList() {
             // Recupera o personagem do mapa usando o índice
             const character = currentPortfolio[Number(index)];
             // Chama a função renderCharacterSheet com o personagem correspondente
-            renderCharacterSheet(character);
+            renderCharacterSheet(character, 0);
         });
     });
     
 }
 
 /**
-* Componente de Card de personagem.
-* @param {Character} character Personagem do Portfólio.
-* @param {number} index Index da ficha de personagem. Usado para calcular o tempo da animação de fadeIn
-* @returns {HTMLElement}
-*/
-const CharacterChard = (character, index) => {
-    let image = character.gallery[0];
-    let name = character.data.personalInfo.heroicName;
-    let powerLevel = character.data.powerLevel;
-    let points = character.data.points.abilities + character.data.points.advantages + character.data.points.powers + character.data.points.skills + character.data.points.defenses; 
-    
-    let characterType = character.data.characterType;
-    let typeText = '';
-    
-    // 0- Personagem, 1- Capanga, 2- Parceiro, 3- Metamorfose
-    
-    switch(characterType) {
-        default:
-        case 0: typeText = 'Personagem'; break;
-        case 1: typeText = 'Capanga'; break;
-        case 2: typeText = 'Parceiro'; break;
-        case 3: typeText = 'Invocação'; break;
-        case 4: typeText = 'Metamorfose'; break;
-    }
-    
-    let realName = character.data.personalInfo.realName;
-    let showRealName = realName && (realName.length > 0);
-    let playerName = character.data.personalInfo.playerName;
-    let showPlayerName = playerName && (playerName.length > 0);
-    
-    return `
-    <div class="card character-card" style="animation: fadeInAnimation ${1 * (index + .25)}s linear forwards;">
-        <div class="card-header"> ${typeText} ${(showPlayerName) ? ` • Jogador: ${playerName}` : ''}</div> 
-        <img src="${image}" class="card-img-top" alt="${name}">
-        <div class="card-body">
-            <p class="card-title"> <b>${name} • NP ${powerLevel}</b> </p>
-            ${showRealName ? `<p class="card-subtitle mb-2 text-body-secondary">${realName}</p>` : ''}
-            <p class="card-text">${name}, Nível de Poder ${powerLevel}, Pontos ${points}</p>
-        </div>
-        <div class='card-footer'>
-            <button type="button" class="btn btn-primary" data-index="${index}">Ir à ficha</button>
-        </div>
-    </div>
-    `;
-}
-
-/**
 * Renderiza o personagem escolhido, gerando a página de ficha de personagem.
 * @param {Character} character Personagem a ser renderizado.
 */
-function renderCharacterSheet(character) {
+function renderCharacterSheet(character, index) {
+    // Atualizar variável global
+    currentCharacter = character;
+    currentIndex = index;
+
     // Deixar opaco o fundo porque tá me dando enjoo
     imageForeground.style.backgroundColor = `rgba(1, 1, 1, .99)`;
     
@@ -128,6 +89,7 @@ function renderCharacterSheet(character) {
     const saveBtn = document.createElement('button');
     saveBtn.className = 'btn btn-primary';
     saveBtn.innerHTML = 'Salvar PDF';
+    saveBtn.disabled = true;
     saveBtn.addEventListener('click', () => { saveToPDF() });    
     
     //      Espandir a ficha
@@ -135,6 +97,7 @@ function renderCharacterSheet(character) {
     widenBtn.className = 'btn btn-primary';
     widenBtn.id = 'wide-reduce-sheet-btn'
     widenBtn.innerHTML = `<img src="../images/icons/arrows-angle-expand.svg" title="Aumentar" alt='Expand' />`;
+    widenBtn.disabled = true;
     widenBtn.addEventListener('click', () => wideContractSheet());
     
     // Add botões
@@ -146,12 +109,6 @@ function renderCharacterSheet(character) {
     const sheetContainer = document.createElement('div')
     sheetContainer.id = 'sheet-container';
     
-    // Ficha Marvel
-    const sheet = document.createElement('div')
-    sheet.className = 'marvel-character-sheet ';
-    sheet.innerHTML = renderMarvelCharacterSheet(character);
-    
-    // Spinner
     // Criar o elemento Spinner
     const spinner = document.createElement('div');
     spinner.className = 'spinner-border';
@@ -162,41 +119,57 @@ function renderCharacterSheet(character) {
     spinner.setAttribute('role', 'status');
     spinner.innerHTML = '<span class="visually-hidden">Loading...</span>';
     
-    // Adicionar o Spinner ao contêiner
-    
+    // Limpa Conteúdo da Página
     mainContent.innerHTML = '';
     
+    // Adicionar os Botões e o Spinner ao Conteúdo
     mainContent.appendChild(btnGroup);
     mainContent.appendChild(spinner);
+
+    // Container que tem a ficha | modelos de fichas
+    const sheetTemplatesBlock = document.createElement('div');
+    sheetTemplatesBlock.id = 'sheet-models-block';
+    sheetTemplatesBlock.className = 'd-flex flex-row';
     
-    sheetContainer.appendChild(sheet);
-    mainContent.appendChild(sheetContainer);
-    sheetContainer.style.visibility = 'hidden';
+    //      Encaixa o container da Ficha
+    sheetTemplatesBlock.appendChild(sheetContainer);
     
-    let templateClass = '';
+    //      Campo de Modelos
+    const templatesBlock = document.createElement('div');
+    templatesBlock.className = 'd-flex flex-column';
+    templatesBlock.appendChild(renderSheetTemplatesOptions());
+    sheetTemplatesBlock.appendChild(templatesBlock);
+
+    // 
+    mainContent.appendChild(sheetTemplatesBlock);
     
-    setTimeout(() => { templateClass = renderSheetTemplate(0, character, sheet)}, 1000);    
-    setTimeout(() => { 
-        sheetContainer.style.visibility = 'visible';        
-        spinner.remove() 
-    }, 3000);
+    // Deixa a ficha invisível enquanto renderiza.
+    sheetTemplatesBlock.style.visibility = 'hidden';
+    
+    // ******************
+    // Renderiza a ficha
+    // ******************
+    renderSheetTemplate(index, character, sheetContainer);
     
     /**
-    * Esse código abaixo é ainda necessário porque o handleResize não pega direitinho 
-    * antes do componente estar 100% renderizado.
+     * Aguarda-se 3 segundos antes de exibir a ficha, para que os elementos 
+     * tenham tempo de surgir para os cálculos de dimensões.
+     * Alguns modelos de ficha não precisam disso.
     */
-    // Padrão .6
-    let scaleOffset = .6;
-    setTimeout(() => {
-        const pages = document.querySelectorAll(`.${templateClass} .a4-page`);
-        pages.forEach((page, index) => {
-            const offset = 297 * (index * scaleOffset); // 297mm multiplicado pela posição
-            page.style.top = `${offset}mm`; // Definindo a posição top diretamente
-        });
-    }, 2000);  
+    setTimeout(() => { 
+        // Exibe a Ficha novamente;
+        sheetTemplatesBlock.style.visibility = 'visible';
+        // Remove o Spinner
+        spinner.remove();
+        
+        // Permite os botões funcionarem
+        saveBtn.disabled = false;
+        widenBtn.disabled = false;
+
+        // Já estrutura o tamanho da escala das fichas.
+        handleResize();
+    }, 1500);
     
-    // Já estrutura o tamanho da escala das fichas.
-    handleResize();
     // Adicionamos o listener de resize
     window.addEventListener('resize', handleResize);
 }
@@ -211,8 +184,8 @@ function wideContractSheet() {
     
     isWideSheet = !isWideSheet;
     let sheetContainer = document.getElementById('sheet-container');
-    sheetContainer.style.minWidth = (isWideSheet) ? '210mm' : '450px';
-    sheetContainer.style.maxWidth = (isWideSheet) ? '' : '40%';
+    sheetContainer.style.minWidth = (isWideSheet) ? '50%' : '450px';
+    sheetContainer.style.maxWidth = (isWideSheet) ? '50%' : '40%';
     
     handleResize();
 }
@@ -252,146 +225,93 @@ function handleResize() {
 * Encaminha o modelo de ficha conforme o tipo.
 * @param {number} index Índice do tipo de ficha.
 * @param {{data: MnMCharacterData, gallery: string[]}} character Dados do Personagem e sua galeria.
-* @param {HTMLElement} container Elemento onde será renderizado páginas adicionais da ficha. Normalmente, é o mesmo modelo espaço.
+* @param {HTMLElement} sheetContainer Elemento onde será renderizado páginas adicionais da ficha. Normalmente, é o mesmo modelo
+* do espaço da ficha.
 */
-function renderSheetTemplate(index, character, container) {
+function renderSheetTemplate(index, character, sheetContainer) {
+    const sheet = document.createElement('div');
+
     switch(index) {
         default:
-        case 0: renderMarvelPowers(character.data.powers, container);
-        return 'marvel-character-sheet';
+        case 0: 
+            sheet.className = 'marvel-character-sheet';
+            sheet.innerHTML = renderMarvelCharacterSheet(character);
+            sheetContainer.appendChild(sheet);
+
+            // Esperar um segundo antes de encaixar os outros elementos.
+            setTimeout(() => { renderMarvelCharacterBlocks(character.data, sheet); }, 1000);    
+            // renderMarvelCharacterPersonalTraits(character.data, container); 
+            break;
+        case 1: 
+            sheet.className = 'jb-character-sheet a4-page';
+            sheet.innerHTML = renderJBCharacterSheet(character);
+            sheetContainer.appendChild(sheet);
     }
+
+    // Para modelos que contém página, a gente adiciona o espaçamento.
+    // let hasPages = [0];
+    // if(hasPages.includes(index)) {
+    //     /**
+    //     * Esse código abaixo é ainda necessário porque o handleResize não pega direitinho 
+    //     * antes do componente estar 100% renderizado.
+    //     */
+    //     // Padrão .6
+    //     let scaleOffset = .6;
+    //     setTimeout(() => {
+    //         const pages = document.querySelectorAll(`.${templateClass} .a4-page`);
+    //         pages.forEach((page, index) => {
+    //             const offset = 297 * (index * scaleOffset); // 297mm multiplicado pela posição
+    //             page.style.top = `${offset}mm`; // Definindo a posição top diretamente
+    //         });
+    //     }, 3000);
+    // }
+
 }
 
-function renderExportOptions() {}
+/**
+ * Lista de Templates
+*/
+const sheetTemplates = [
+    {
+        index: 0, 
+        name: 'Modelo Marvel', 
+        description: 'Baseado no site da Marvel Comics, com imagem de cabeçalho e campos do personagem sendo distribuídos lado-a-lado com os poderes e equipamentos.', 
+        img: '../images/sheet examples/marvel-sheet-template.png',
+        credits: 'Gio Mota'
+    },
+    {
+        index: 1, 
+        name: 'Modelo JB', 
+        description: 'Um modelo simples com cabeçalhos laranjas e quebra de página dinâmica.', 
+        img: '../images/sheet examples/jb-sheet-template.png',
+        credits: 'João Brasil'
+    },
+];
+
+/**
+ * Renderiza a lista de templates de fichas.
+ * @returns {string} Elemento HTML como string.
+*/
+function renderSheetTemplatesOptions() {
+    let asideBlock = document.createElement('aside');
+    asideBlock.id = 'sheet-templates';
+
+    let listBlock = document.createElement('ul');
+    listBlock.className = 'list-group';
+
+    let listItem;
+    for(let sheetTemplate of sheetTemplates.sort()) {
+        listItem = document.createElement('li');
+        listItem.className = 'list-group-item';
+        if(sheetTemplate.index === currentIndex) listItem.className += ' active';
+        listItem.appendChild(TemplateCard(sheetTemplate));
+
+        listBlock.appendChild(listItem);
+    }
+    
+    asideBlock.appendChild(listBlock);
+
+    return asideBlock;
+}
 
 function renderCombatTracker() {}
-
-
-// **********************************************************************
-// Componentes Padrões
-// **********************************************************************
-/**
-* Renderiza, em string, a Vantagem do personagem.
-* @param {FeatData} feat Vantagem a ser renderizada.
-* @returns {string}
-*/
-function renderDefaultFeat(feat) {
-    let featTxt = feat.name;
-    if(feat.rank > 1) featTxt += ` ${feat.rank}`;
-    if(feat.trait && feat.trait.length > 1) featTxt += ` (${feat.trait})`;
-    return featTxt;
-}
-
-/**
-* Renderiza as informações sobre o poder do personagem.
-* @param {PowerData} power Poder a ser explorado as características.
-* @returns {string}
-*/
-function renderDefaultPower(power) {
-    
-    // Abrir Parênteses    
-    let isDynamic = power.isDynamicEffect;
-    let hasAffectedTrait = (power.affectedTrait !== "" && power.affectedTrait !== "Nenhum");
-    let hasResistedBy = (power.resistedBy !== "" && power.resistedBy !== "Nenhum");
-    
-    let hasEnhancements = !!(power.enhancedTraits && power.enhancedTraits.length > 0);
-    let hasEnhancedAdvantages = power.enhancedAdvantages.length > 0;
-    
-    let hasDescriptors = (power.descriptors.length > 0);
-    let hasFlats = (power.flats.length > 0);
-    let hasExtras = (power.extras.length > 0);
-    let hasFlaws = (power.flaws.length > 0);
-    
-    let isRemovable = (power.removable > 0);
-    
-    // Aflição
-    let hasFirstDegree = !!(power.firstDegree && power.firstDegree.length > 0);
-    let hasSecondDegree = !!(power.secondDegree && power.secondDegree.length > 0);
-    let hasThirdDegree = !!(power.thirdDegree && power.thirdDegree.length > 0);
-    
-    let isArray = power.effectID === 5042;
-    
-    const details = [];
-    
-    // É Removível
-    if(isRemovable) details.push((power.removable === 1) ? `Difícil de Remover` : `Fácil de Remover`);
-    // É dinâmico
-    if(isDynamic && !power.isAlternateEffect) details.push(`<span>Dinâmico</span>`);
-    // Poder base do Arranjo
-    if(isArray) details.push(`<b>Poder base:</b> ${power.biggest}`)
-        // Afeta alguma característica
-    if(hasAffectedTrait) details.push(`<span>${power.affectedTrait}</span>`)
-        // Tem Resistência
-    if(hasResistedBy) details.push(`<span><b>Resistido por</b>: ${power.resistedBy}</span>`);
-    
-    // Tem opções de Poder
-    if(power.powerOptions) {
-        details.push(`
-            ${power.powerOptions.map((pwrOpt) => `
-                ${pwrOpt.name}${pwrOpt.rank !== 1 ? ` ${pwrOpt.rank}` : ''}
-                ${pwrOpt.traitText.length > 0 ? ` [${pwrOpt.traitText}]` : ''}
-            `).join(', ')}`
-        );
-    }
-    
-    // É Aflição
-    if(power.overcomedBy) {
-        details.push(`<span><b>Superador por</b>: ${power.overcomedBy}</span>`);
-        if(power.variableDegree === 4) details.push(`Todas Condições Variáveis`);
-        else {
-            if(hasFirstDegree || power.variableDegree === 1) {
-                details.push(`<b>1º Grau:</b> ${(power.variableDegree === 1) ? 'Variável' : `${power.firstDegree}`}`);
-            }
-            
-            if((hasSecondDegree || power.variableDegree === 2) && power.limitedDegree < 2) {
-                details.push(`<b>2º Grau:</b> ${(power.variableDegree === 2) ? 'Variável' : `${power.secondDegree}`}`);
-            }
-            
-            if((hasThirdDegree || power.variableDegree === 3) && power.limitedDegree < 1) {
-                details.push(`<b>3º Grau:</b> ${(power.variableDegree === 2) ? 'Variável' : `${power.thirdDegree}`}`);
-            }
-        }
-        
-    }
-    
-    // Modificadores Fixos
-    if(hasFlats) details.push(`<b>Fixos:</b> ${power.flats.map((elem) => renderDefaultModifier(elem, true)).join(', ')}`);
-    
-    // Modificadores Extras
-    if(hasExtras) details.push(`<b>Extras:</b> ${power.extras.map((elem) => renderDefaultModifier(elem, false)).join(', ')}`);
-    
-    // Modificadores Falhas
-    if(hasFlaws) details.push(`<b>Falhas:</b> ${power.flaws.map((elem) => renderDefaultModifier(elem, false)).join(', ')}`);
-    
-    // <PSSModifierRender modifier={elem} isExtra={elem.extra} isFlat={true} />
-    
-    // Modificações
-    if(hasEnhancements) {
-        details.push(`<b>Modificações</b>: ${power.enhancedTraits.map((elem) => `${elem.trait} ${elem.rank}`)}`);
-    }
-    
-    if(hasEnhancedAdvantages) {
-        details.push(`<b>Vantagens</b>: ${power.enhancedAdvantages.map((elem) => renderDefaultFeat(elem)).join(', ')}`);
-    }
-    
-    // Descritores
-    if(hasDescriptors) details.push(`<b>Descritores</b>: ${power.descriptors.map((elem) => `${elem}`).join(', ')}`);
-    
-    return `
-        ${power.effect} ${power.strengthBased ? ' baseado em Força' : ''} ${power.showRank ? `${power.rank}` : ''}
-        ${details.length > 0 ? `(${details.map(elem => `${elem}`).join('. ')})` : ''}
-    `;
-}
-
-/**
-* Renderiza Modificador de Poder.
-* @param {ModifierData} modifier Modificador a ser renderizado.
-* @param {boolean} isFlat Se o Modificador é Fixo ou Extra/Falha por Graduação.
-* @returns {string}
-*/
-function renderDefaultModifier(modifier, isFlat) {
-    return `
-        ${modifier.name} ${(modifier.extra) ? `+${modifier.rank}` : `-${modifier.rank}`}${!(isFlat) ? `/grad` : '/fixo'}
-        ${modifier.hasTrait ? `[${modifier.traitText}]` : ''}
-    `;
-}

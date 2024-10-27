@@ -22,7 +22,7 @@
     <!-- Navegação -->
     <nav class="navbar navbar-expand-lg navbar-dark border-bottom border-2 border-white bg-opacity-10 min-vw-100">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="#" onclick="renderHome()">
                 <img src="favicon.ico" alt="Bootstrap" width="30" height="24">
                 <b>Nexus Supremo</b>
             </a>
@@ -41,7 +41,7 @@
                    
                     <li class="nav-item">
                         <a class="nav-link disabled" aria-current="page" href="#" data-bs-target="modal" data-bs-target="#updatesModal">
-                            Notas de Atualizações
+                            Notas da Versão
                         </a>
                     </li>
                     
@@ -141,9 +141,14 @@
         </div>
     </div>
     
+    <!-- Aux -->
+    <script src="scripts/components.js"></script>
     <script src="scripts/alerts.js"></script>
     <script src="scripts/findInPort.js"></script>
-    <script src="scripts/Sheets Renders/MarvelSheetRender.js"></script>
+    <!-- Modelos de Fichas -->
+    <script src="scripts/Sheets Renders/ModeloJB.js"></script>
+    <script src="scripts/Sheets Renders/ModeloMarvel.js"></script>
+    <!-- Principais -->
     <script src="scripts/render.js"></script>
     <script src="scripts/main.js"></script>
 </body>

@@ -1,0 +1,38 @@
+/* ****************************** */
+/* Ficha no modelo do João Brasil */
+/* ****************************** */
+.jb-character-sheet {
+    width: 210mm;
+    
+    background-color: white;
+    color: #111;
+    font-family: 'Times New Roman', Times, serif;
+    padding: 80px 120px; /* calculado olhando a ficha dele */
+
+    header {
+        color: #c04f15;
+    }
+
+    img {
+        max-width: 75%;
+        max-height: calc(296.5mm * 0.5);
+    }
+
+    * {
+        page-break-inside: avoid;
+    }
+
+    h1, h2, h3, h4, h5  {
+        margin: 5mm 0 0 0;
+    }
+}
+
+.grid-4x4 {
+    display: grid;
+    grid-template-columns: repeat(4, 20%);
+}
+
+.grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, 20%);
+}

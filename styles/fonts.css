@@ -6,6 +6,11 @@
     src: local("BEBAS NEUE"), url("../fonts/BebasNeue-Regular.ttf") format("truetype");  
 }
 
+@font-face {
+    font-family: "Nexa Slab Black";
+    src: local("Nexa Slab Black"), url("../fonts/Nexa Slab Black.ttf") format("truetype");  
+}
+
 /* Quantico */
 .quantico-regular {
     font-family: "Quantico", sans-serif;
