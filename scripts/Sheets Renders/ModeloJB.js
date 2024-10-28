@@ -68,7 +68,7 @@ function renderJBCharacterSheet(character) {
         ${offensiveData.attacks.map(attack => `<span>${renderJBAttack(attack)}</span>`).join('<br/>')}
         
         <header><h4><b>Defesas</b> (${points.defenses})</h4></header>
-        <div class='grid-2x2'>
+        <div class='grid-2x20'>
         ${characterData.defenses.map(defense => `<div>${defense.name} ${defense.totalText}</div>`).join('')}
         </div>
 
@@ -100,11 +100,24 @@ function renderJBCharacterSheet(character) {
             : ''
         }
 
+        ${character.gallery.length > 1 ? `
+            <header><h4><b>Galeria</b></h4></header>
+            <div class='grid-2x40 w-100'>
+                ${character.gallery.slice(1).map((elem, index) => `<img src='${elem}' alt='Img${index}' />`).join('')}
+            </div>
+            `
+        : ''}
+
         `;
 
     return sheetOutput;
 }
 
+/**
+ * Renderiza, como string, as Perícias do personagem. Corrige também união de perícias de Combate e Especialidade.
+ * @param {SkillData[]} skills Perícias do Personagem
+ * @returns {string}
+*/
 function renderJBSkills(skills) {
     let traitSkill = '';
     let output = [];
@@ -124,8 +137,6 @@ function renderJBSkills(skills) {
         output.push(`${skillName} +${skill.rank} (${skill.total > 0 ? `+${skill.total}` : `${skill.total}`})`)
     }
 
-    // characterData.skills.map((skill) => {).join(', ')
-
     return output.join(', ');
 }
 
@@ -133,7 +144,7 @@ function renderJBSkills(skills) {
  * Renderiza, como string, o elemento de ataque.
  * @param {AttackData} attack Ataque a ser renderizado.
  * @returns {string}
- */
+*/
 function renderJBAttack(attack) {
     let bonus = (attack.hitBonus > 0) ? `+${attack.hitBonus}` : `${attack.hitBonus}`;
 
@@ -146,4 +157,18 @@ function renderJBAttack(attack) {
     }
 
     return `${attack.name} ${bonus} - ${range}, ${attack.effect} CD ${attack.cd}`;
+}
+
+/**
+ * Informa os dados e funções para troca de cores da ficha.
+ * @returns {{name: string, baseValue: string, callback: any}}
+ */
+function colorChangeJBSheet() {
+    let baseColor = '#c04f15';
+
+    const changeHeader = (colorStr) => {
+        document.documentElement.style.setProperty('--headerFC', colorStr);
+    }
+
+    return [{ name: 'Cabeçalho', baseValue: baseColor, callback: changeHeader }];
 }

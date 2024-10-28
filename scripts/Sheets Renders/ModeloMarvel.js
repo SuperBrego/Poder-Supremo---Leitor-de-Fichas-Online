@@ -90,15 +90,6 @@ function renderMarvelCharacterSheet(character) {
     </div>
     `;
     
-    let page3 = `
-    <!-- Página 3 -->
-    <div id="page3" class="a4-page">
-        <!-- Informações do Personagem -->
-        
-        
-    </div>
-    `;
-    
     return `${page1}${page2}`;
 }
 
@@ -140,22 +131,23 @@ function renderMarvelCharacterBlocks(characterData, container) {
     let blocks = [].concat(
         setMarvelOffensiveBlocks(characterData.offensive),
         setMarvelPowersBlocks(spreadPowers(characterData.powers)), 
-        setMarvelEquipmentBlocks(spreadEquipments(characterData.equipments))
+        setMarvelEquipmentBlocks(spreadEquipments(characterData.equipments)),
+        setMarvelComplicationsBlock(characterData.complications)
     );
 
     // **************************************
     // Socar todo mundo dentro dos Divs.
     // **************************************    
-    const powerContainer1 = document.getElementById('content-listing-page1');
-    const powerContainer2 = document.getElementById('content-listing-page2');
+    const contentContainer1 = document.getElementById('content-listing-page1');
+    const contentContainer2 = document.getElementById('content-listing-page2');
     
-    var maxBlocks = countPowerBlocksWithStrictOverflow(powerContainer1, blocks);
+    var maxBlocks = countPowerBlocksWithStrictOverflow(contentContainer1, blocks);
     let leftovers = blocks.length - maxBlocks;
     // console.log(`Você pode adicionar ${maxBlocks} blocos antes de causar overflow, sobrando ${blocks.length - maxBlocks}.`);
     
     if(leftovers > 0) {
         blocks = blocks.splice(maxBlocks)
-        maxBlocks = countPowerBlocksWithStrictOverflow(powerContainer2, blocks);
+        maxBlocks = countPowerBlocksWithStrictOverflow(contentContainer2, blocks);
         // console.log(`Você pode adicionar ${maxBlocks} blocos antes de causar overflow, sobrando ${blocks.length - maxBlocks}.`);
         leftovers = blocks.length - maxBlocks;
     }
@@ -219,12 +211,12 @@ function setMarvelPowersBlocks(powers) {
         
         if(power.description.length > 0) {
             descriptionBlock = document.createElement('p');
-            descriptionBlock.innerHTML = `<span class="gold-bold">Drama:</span> ${power.description}`
+            descriptionBlock.innerHTML = `<span class="power-titles">Drama:</span> ${power.description}`
             powerBlock.appendChild(descriptionBlock);
         }
         
         descriptionBlock = document.createElement('p');
-        descriptionBlock.innerHTML = `<span class="gold-bold">Mecânica:</span> ${renderPowerDefault(power)}`;
+        descriptionBlock.innerHTML = `<span class="power-titles">Mecânica:</span> ${renderPowerDefault(power)}`;
         powerBlock.appendChild(descriptionBlock);
         
         blocks.push(powerBlock);
@@ -267,6 +259,10 @@ function setMarvelEquipmentBlocks(equipments) {
     return blocks;
 }
 
+/**
+ * Define os Blocos de Ataques de Personagem para adicionar ao elemento lista.
+ * @returns {HTMLElement[]}
+*/
 function setMarvelOffensiveBlocks(offensiveData) {
     let blocks = [];
     let attacks = offensiveData.attacks;
@@ -334,4 +330,177 @@ function setMarvelOffensiveBlocks(offensiveData) {
     }
 
     return blocks;
+}
+
+/**
+ * Define os Blocos de Complicações de Personagem para adicionar ao elemento lista.
+ * @returns {HTMLElement[]}
+*/
+function setMarvelComplicationsBlock(complications) {
+    let blocks = [];
+
+    let sectionHeader, complicationBlock, complicationHeader, complicationDescription;
+    
+    sectionHeader = document.createElement('h2');
+    sectionHeader.innerHTML = 'Complicações';
+    blocks.push(sectionHeader);
+
+    for(let complication of complications) {
+        complicationBlock = document.createElement('div');
+        complicationBlock.className = 'complication-block';
+
+        complicationHeader = document.createElement('header');
+        complicationHeader.innerHTML = complication.title;
+        complicationBlock.appendChild(complicationHeader);
+        
+        complicationDescription = document.createElement('p');
+        complicationDescription.innerHTML = complication.description;
+        complicationBlock.appendChild(complicationDescription);
+
+        blocks.push(complicationBlock);
+    }
+
+    return blocks;
+}
+
+/**
+ * Adiciona a história do personagem e informações pessoais, tomando cuidado de encaixar apenas caso haja espaço, 
+ * do contrário cria uma página nova.
+ * @param {personalInfo} personalInfo Informações pessoais do personagem
+ * @param {HTMLElement} sheetContainer Elemento HTML onde será acrescentado páginas novas.
+ */
+function renderMarvelCharacterPersonalTraits(personalInfo, sheetContainer) {
+    if(personalInfo.story.length <= 0) return;
+    /**
+     * Vou ver a última página a4 criada.
+     * Se for a segunda, cria uma nova e põe o formato Conteúdo | Barra Lateral com informações.
+     * Se não, vou ver a porcentagem dela ocupada. Se for maior que 60%, crio uma nova página e faço igual acima.
+     * Se não for maior que 60%, pego o conteúdo dela, ponho dentro de um Flex e ponho Conteúdo | Barra Lateral e vou encaixando a história.
+    */
+    let a4Pages = document.querySelectorAll(`.marvel-character-sheet .a4-page`);
+    let lastPage = (a4Pages.length > 0) ? a4Pages[a4Pages.length - 1] : undefined;
+    if(!lastPage) throw alert("Render Marvel Character Personal Traits \nErro em pegar a última página.");
+
+    // Background blocks
+    let blocks = [];
+    let storyParagraphs = personalInfo.story.split('\n');
+
+    let paragraphElement;
+
+    let storyHeader = document.createElement('h2');
+    storyHeader.innerHTML = 'História';
+    blocks.push(storyHeader);
+
+    for(let storyParagraph of storyParagraphs) {
+        if(storyParagraph.length <= 0) continue;
+        paragraphElement = document.createElement('p');
+        paragraphElement.innerHTML = storyParagraph;
+        blocks.push(paragraphElement);
+    }
+    
+    // Onde vou colocar o conteúdo.
+    let splitContainer = document.createElement('div');
+    splitContainer.className = 'container d-flex h-100';
+
+    // Separo o content-listing da última página
+    let contentList = lastPage.querySelector(`.content-listing`);
+    if(!contentList) throw alert("Content Listing não encontrado dentro de última página.");
+
+    let percentage = calculateRemainingSpacePercentage(contentList);
+    let maxBlocks, leftovers;
+    let newPage;
+
+    // Crio o bloco lateral de informações pessoais
+    let infoBlock = document.createElement('aside');
+    infoBlock.id = 'info-block';
+    infoBlock.className = 'p-3';
+    infoBlock.innerHTML = `
+        <h3>Dados Pessoais</h3>
+        ${personalInfo.realName.length > 0 ? `<div><b>Nome Real:</b> ${personalInfo.realName}</div>` : ''}
+        ${personalInfo.gender.length > 0 ? `<div><b>Gênero:</b> ${personalInfo.gender}</div>` : ''}
+        <div><b>Idade:</b> ${personalInfo.age}</div>
+        <div><b>Altura:</b> ${personalInfo.height} cm</div>
+        <div><b>Peso:</b> ${personalInfo.weight} kg</div>
+        ${personalInfo.hair.length > 0 ? `<div><b>Cor Cabelo:</b> ${personalInfo.hair}</div>` : ''}
+        ${personalInfo.eyes.length > 0 ? `<div><b>Cor Olhos:</b> ${personalInfo.eyes}</div>` : ''}
+    `;
+
+    // Para melhor encaixe, faço o tamanho do listing ser um pouco menor.
+    let offsettedHeight = percentage - 2;
+
+    // Se for livre mais que metade da página.
+    if(percentage >= 50) {
+        //      defino o espaço do content-listing já para seu novo elemento pai.
+        contentList.className = 'content-listing col-8 p-3';
+        //      Com esse
+        contentList.style.height = `${offsettedHeight}%`;
+
+        // Adiciono no container, ficando lado a lado
+        splitContainer.appendChild(contentList);
+        splitContainer.appendChild(infoBlock);
+        lastPage.appendChild(splitContainer);
+
+        // Agora tento encaixar o conteúdo dentro do bloco.
+        maxBlocks = countPowerBlocksWithStrictOverflow(contentList, blocks);
+        leftovers = blocks.length - maxBlocks;
+
+        // Se sobrar ainda elementos para encaixar, crio uma nova página.
+        while(leftovers > 0) {
+            newPage = document.createElement('div');
+            newPage.className = 'a4-page p-5';
+            
+            let contentListing = document.createElement('div');
+            contentListing.className = 'content-listing';
+            newPage.appendChild(contentListing);        
+            
+            sheetContainer.appendChild(newPage);
+
+            // Recorto a quantidade de conteúdo ainda a postar
+            blocks = blocks.splice(maxBlocks);
+
+            maxBlocks = countPowerBlocksWithStrictOverflow(contentListing, blocks);
+            leftovers = blocks.length - maxBlocks;
+        }
+    }
+    // do contrário, crio uma nova página
+    else {
+        newPage = document.createElement('div');
+        newPage.className = 'a4-page p-5';
+        
+        let contentListing = document.createElement('div');
+        contentListing.className = 'content-listing p-2';
+
+        splitContainer.appendChild(contentListing);
+        splitContainer.appendChild(infoBlock);
+        
+        // Adiciona o container dividido na página.
+        newPage.appendChild(splitContainer);
+        
+        sheetContainer.appendChild(newPage);
+        // Recorto a quantidade de conteúdo ainda a postar
+        blocks = blocks.splice(maxBlocks);
+
+        maxBlocks = countPowerBlocksWithStrictOverflow(contentListing, blocks);
+        leftovers = blocks.length - maxBlocks;
+
+        while(leftovers > 0) {
+            newPage = document.createElement('div');
+            newPage.className = 'a4-page p-5';
+
+            storyHeader = document.createElement('h2');
+            storyHeader.innerHTML = 'Cont. História';
+            blocks.unshift(storyHeader);
+            
+            let contentListing = document.createElement('div');
+            contentListing.className = 'content-listing';
+            newPage.appendChild(contentListing);        
+            
+            sheetContainer.appendChild(newPage);
+            // Recorto a quantidade de conteúdo ainda a postar
+            blocks = blocks.splice(maxBlocks);
+
+            maxBlocks = countPowerBlocksWithStrictOverflow(contentListing, blocks);
+            leftovers = blocks.length - maxBlocks;
+        }
+    }
 }

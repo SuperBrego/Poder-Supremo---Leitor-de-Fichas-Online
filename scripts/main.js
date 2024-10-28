@@ -3,7 +3,7 @@ window.onload = () => {
     // Habilitando Popovers;
     const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
     const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
-    
+
     renderHome();
 }
 
@@ -52,14 +52,15 @@ function characterTest(portfolio) {
 }
 
 /**
-* 
+* Salva a ficha para modelo PDF.
 */
 function saveToPDF() {
     
     const options = {
         margin: [0, 0, 0, 0], // Remove margens
-        filename: `Ficha de Personagem.pdf`,
+        filename: (currentCharacter ? `${currentCharacter.data.name}.pdf` : `Ficha de Personagem.pdf`),
         html2canvas: { scale: 2 },
+        image: { type: 'jpeg', quality: 0.98 },
         pageBreak: { mode: 'css' },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     };
@@ -68,7 +69,6 @@ function saveToPDF() {
     
     let clonedNode;
     let sheets = Array.from(document.querySelectorAll(`#sheet-container .a4-page`));
-    console.log(sheets)
     
     for (let index = 0; index < sheets.length; index++) {
         clonedNode = sheets[index].cloneNode(true);
@@ -204,5 +204,5 @@ function calculateRemainingSpacePercentage(container) {
     
     // Calcular a porcentagem de espaço restante
     const remainingSpace = containerHeight - usedHeight;
-    return (remainingSpace / containerHeight) * 100;
+    return Math.floor((remainingSpace / containerHeight) * 100);
 }

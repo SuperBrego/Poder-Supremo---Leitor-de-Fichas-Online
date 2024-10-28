@@ -14,9 +14,6 @@
         left: 0;
     }
 
-    h2, h3 {
-        font-family: 'Nexa Slab Black';
-    }
 }
 
 /* Estrutura das Páginas */
@@ -85,6 +82,47 @@
 }
 
 /* ******************************************* */
+/* Blocos de Poderes */
+/* ******************************************* */
+.power-block, .complication-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: fit-content;
+    
+    header {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    
+    p { 
+        font-size: .7rem;
+    }
+
+}
+
+/* ******************************************* */
+/* Blocos Laterais */
+/* ******************************************* */
+#defenses {
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-color: #999;
+    display: flex;
+    flex-direction: column;
+    gap: 5%;
+}
+
+#info-block, #skills-advs { 
+    display: flex;
+    flex-direction: column;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-color: #999;
+    margin-top: 1rem;
+}
+
+/* ******************************************* */
 /* Padding para cada corpo */
 /* ******************************************* */
 #image-header { padding: 0 1rem; }
@@ -98,9 +136,9 @@
 #content-listing-page1 { padding: 0 1rem; }
 #content-listing-page2 { padding: 1rem 0; }
 
-/* ******************************************* */
+/* ******************************** */
 /* Habilidades */
-/* ******************************************* */
+/* ******************************** */
 #abilities {
     display: flex;
     gap: 5px;
@@ -137,47 +175,25 @@
     transform: translateX(-50%);
 }
 
-/* ******************************************* */
+/* ******************************** */
 /* Defesas */
-/* ******************************************* */
+/* ******************************** */
 #defenses-powers {
     display: flex;
     justify-self: center;
     height: 60%;
 }
 
-#defenses {
-    border-right-width: 1px;
-    border-right-style: solid;
-    border-color: #999;
-    /* border-image: linear-gradient(#00000000, #999 ,#00000000) 30; */
-    
-    display: flex;
-    flex-direction: column;
-    gap: 5%;
-}
-
 .defItem header {
     font-weight: bold;
 }
 
-/* ******************************************* */
+/* ******************************** */
 /* Perícias */
-/* ******************************************* */
+/* ******************************** */
 #skillsAdvs-powers {
     display: flex;
     height: 90%;
-}
-
-#skills-advs {
-    display: flex;
-    flex-direction: column;
-    
-    border-left-width: 1px;
-    border-left-style: solid;
-    border-color: #999;
-    margin-top: 1rem;
-    /* border-image: linear-gradient(#00000000, #999 ,#00000000) 30; */
 }
 
 #skills {
@@ -196,9 +212,9 @@
     text-align: center;
 }
 
-/* ******************************************* */
+/* ******************************** */
 /* Poderes */
-/* ******************************************* */
+/* ******************************** */
 .content-listing {
     display: flex;
     flex-direction: column;
@@ -206,44 +222,16 @@
 }
 
 .power-block {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    height: fit-content;
-    
     header {
-        font-size: 18px;
         color: #063c9e;
-        font-weight: bold;
-    }
-    
-    p { 
-        font-size: .7rem;
     }
 }
 
-.gold-bold {
+.power-titles {
     font-size: 14px;
     font-weight: bold;
-    color: darkgoldenrod;
-}
-
-.darkred-bold {
-
-    > b:first-of-type {
-        font-size: 14px;
-        font-weight: bold;
-        color: darkred;
-    }
-}
-
-.darkgreen-bold {
-
-    > b:first-of-type {
-        font-size: 14px;
-        font-weight: bold;
-        color: darkgreen;
-    }
+    color: #29303c;
+    font-style: italic;
 }
 
 /* Poderes Alternativos e/ou Poderes em Grupos */
@@ -256,6 +244,35 @@
     }
 }
 
-/* ******************************************* */
+/* ******************************** */
+/* Complicações */
+/* ******************************** */
+.complication-block {
+    header {
+        color: darkgoldenrod;
+    }
+}
+
+/* ******************************** */
+/* Ofensiva */
+/* ******************************** */
+.darkred-bold {
+
+    > b:first-of-type {
+        font-size: 14px;
+        font-weight: bold;
+        color: darkred;
+    }
+}
+
+/* ******************************** */
 /* Equipamentos */
-/* ******************************************* */
+/* ******************************** */
+.darkgreen-bold {
+
+    > b:first-of-type {
+        font-size: 14px;
+        font-weight: bold;
+        color: darkgreen;
+    }
+}

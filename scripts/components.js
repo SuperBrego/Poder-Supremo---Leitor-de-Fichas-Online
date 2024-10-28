@@ -51,27 +51,82 @@ const CharacterChard = (character, index) => {
  * @returns {string} Elemento HTML Card como String
 */
 function TemplateCard(templateInfo) {
-    let templateCard = document.createElement('div');
+    const colorTemplates = [1];
 
-    templateCard.innerHTML = `
-    <div class="card mb-3 template-sheet-card" style="max-width: 540px;">
-        <div class="row g-0">
-            <div class="col-md-4">
-                <img src="${templateInfo.img}" class="img-fluid rounded-start" alt="${templateInfo.name}">
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">${templateInfo.name}</h5>
-                    <p class="card-text">${templateInfo.description}</p>
-                    <p class="card-text"><small class="text-body-secondary"><b>Créditos:</b> ${templateInfo.credits}</small></p>
-                </div>
-            </div>
+    const card = document.createElement('div');
+    card.className = "card mb-3 template-sheet-card";
+    card.style.maxWidth = '500px';
+
+    let cardFirstRow = document.createElement('div');
+    cardFirstRow.className = 'row g-0';
+    if(currentIndex !== templateInfo.index) cardFirstRow.onclick = () => renderCharacterSheet(currentCharacter, templateInfo.index);
+    else cardFirstRow.onclick = () => {};
+
+    cardFirstRow.innerHTML = `
+    <div class="col-md-4">
+        <img src="${templateInfo.img}" class="img-fluid rounded-start" alt="${templateInfo.name}">
+    </div>
+    <div class="col-md-8">
+        <div class="card-header"><h5 class="card-title">${templateInfo.name}</h5></div>
+        <div class="card-body">
+            <p class="card-text">${templateInfo.description}</p>
+            <p class="card-text"><small class="text-body-secondary"><b>Créditos:</b> ${templateInfo.credits}</small></p>
         </div>
     </div>
     `;
 
-    templateCard.onclick = () => renderCharacterSheet(currentCharacter, templateInfo.index);
-    return templateCard;
+    card.appendChild(cardFirstRow);
+
+    // Templates que posso mudar de cor
+    if(colorTemplates.includes(templateInfo.index) && currentIndex === templateInfo.index) {
+        const colorRows = document.createElement('div');
+        colorRows.className = 'd-block';
+
+        let rowHeader = document.createElement('header');
+        rowHeader.className = 'w-100 text-center bg-light-subtle';
+        rowHeader.innerHTML = '<b>Altere as Cores conforme desejar</b>';
+        colorRows.appendChild(rowHeader);
+
+        let colorChangesCallbacks = [];
+        switch(templateInfo.index) {
+            default: return card;
+            case 1: colorChangesCallbacks = colorChangeJBSheet();
+        }
+
+        let colorChangeBlock, colorHeader, colorChangeInput;
+        
+        for(let colorFunction of colorChangesCallbacks) {
+            // Crio o bloco onde encaixo o título e função de mudar cor
+            colorChangeBlock = document.createElement('div');
+            colorChangeBlock.className = 'grid col-md-6 p-2';
+
+            //      Título
+            colorHeader = document.createElement('div');
+            colorHeader.innerHTML = `<b>${colorFunction.name}</b>`;
+            colorChangeBlock.appendChild(colorHeader);
+            
+            //      Função de Mudar cor
+            colorChangeInput = document.createElement('input');
+            colorChangeInput.type = 'color';
+            colorChangeInput.value = colorFunction.baseValue;
+            colorChangeInput.name = colorFunction.name;
+            colorChangeInput.onchange = (event) => colorFunction.callback(event.target.value);
+            colorChangeInput.style.cursor = 'pointer';
+            
+            //      Encaixar Todos
+            colorChangeBlock.appendChild(colorChangeInput);
+            
+            //      Colocar dentro da linha.
+            colorRows.appendChild(colorChangeBlock);
+        }
+        
+        colorRows.appendChild(colorChangeBlock);
+
+        // Encaixar no Card.
+        card.appendChild(colorRows);
+    }
+
+    return card;
 }
 
 // ******************************

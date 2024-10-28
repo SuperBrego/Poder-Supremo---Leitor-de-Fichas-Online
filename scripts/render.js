@@ -168,7 +168,7 @@ function renderCharacterSheet(character, index) {
 
         // Já estrutura o tamanho da escala das fichas.
         handleResize();
-    }, 1500);
+    }, 1200);
     
     // Adicionamos o listener de resize
     window.addEventListener('resize', handleResize);
@@ -238,34 +238,16 @@ function renderSheetTemplate(index, character, sheetContainer) {
             sheet.innerHTML = renderMarvelCharacterSheet(character);
             sheetContainer.appendChild(sheet);
 
-            // Esperar um segundo antes de encaixar os outros elementos.
-            setTimeout(() => { renderMarvelCharacterBlocks(character.data, sheet); }, 1000);    
-            // renderMarvelCharacterPersonalTraits(character.data, container); 
+            // Esperar um momento antes de encaixar os outros elementos.
+            setTimeout(() => { renderMarvelCharacterBlocks(character.data, sheet); }, 1000);
+            setTimeout(() => { renderMarvelCharacterPersonalTraits(character.data.personalInfo, sheet); }, 1100);
             break;
         case 1: 
             sheet.className = 'jb-character-sheet a4-page';
             sheet.innerHTML = renderJBCharacterSheet(character);
             sheetContainer.appendChild(sheet);
+            break;
     }
-
-    // Para modelos que contém página, a gente adiciona o espaçamento.
-    // let hasPages = [0];
-    // if(hasPages.includes(index)) {
-    //     /**
-    //     * Esse código abaixo é ainda necessário porque o handleResize não pega direitinho 
-    //     * antes do componente estar 100% renderizado.
-    //     */
-    //     // Padrão .6
-    //     let scaleOffset = .6;
-    //     setTimeout(() => {
-    //         const pages = document.querySelectorAll(`.${templateClass} .a4-page`);
-    //         pages.forEach((page, index) => {
-    //             const offset = 297 * (index * scaleOffset); // 297mm multiplicado pela posição
-    //             page.style.top = `${offset}mm`; // Definindo a posição top diretamente
-    //         });
-    //     }, 3000);
-    // }
-
 }
 
 /**
@@ -282,7 +264,7 @@ const sheetTemplates = [
     {
         index: 1, 
         name: 'Modelo JB', 
-        description: 'Um modelo simples com cabeçalhos laranjas e quebra de página dinâmica.', 
+        description: 'Um modelo simples com cabeçalhos e quebra de página dinâmica.', 
         img: '../images/sheet examples/jb-sheet-template.png',
         credits: 'João Brasil'
     },
@@ -303,7 +285,14 @@ function renderSheetTemplatesOptions() {
     for(let sheetTemplate of sheetTemplates.sort()) {
         listItem = document.createElement('li');
         listItem.className = 'list-group-item';
-        if(sheetTemplate.index === currentIndex) listItem.className += ' active';
+        if(sheetTemplate.index === currentIndex) {
+            listItem.className += ' active';
+            // listItem.setAttribute('data-bs-toggle', 'tooltip');
+            // listItem.setAttribute('data-bs-placement', 'top');
+            // listItem.setAttribute('data-bs-title', 'Selecionar Modelo');
+        }
+        else listItem.style.cursor = 'pointer';
+
         listItem.appendChild(TemplateCard(sheetTemplate));
 
         listBlock.appendChild(listItem);
