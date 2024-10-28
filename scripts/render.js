@@ -96,7 +96,7 @@ function renderCharacterSheet(character, index) {
     const widenBtn = document.createElement('button');
     widenBtn.className = 'btn btn-primary';
     widenBtn.id = 'wide-reduce-sheet-btn'
-    widenBtn.innerHTML = `<img src="../images/icons/arrows-angle-expand.svg" title="Aumentar" alt='Expand' />`;
+    widenBtn.innerHTML = `<img src="images/icons/arrows-angle-expand.svg" title="Aumentar" alt='Expand' />`;
     widenBtn.disabled = true;
     widenBtn.addEventListener('click', () => wideContractSheet());
     
@@ -179,8 +179,8 @@ function renderCharacterSheet(character, index) {
 */
 function wideContractSheet() {
     let wideBtn = document.getElementById('wide-reduce-sheet-btn');
-    if(isWideSheet) wideBtn.innerHTML = `<img src="../images/icons/arrows-angle-expand.svg" title="Aumentar" alt='Expand' />`;
-    else wideBtn.innerHTML = `<img src="../images/icons/arrows-angle-contract.svg" title="Reduzir"  alt='contract' />`;
+    if(isWideSheet) wideBtn.innerHTML = `<img src="images/icons/arrows-angle-expand.svg" title="Aumentar" alt='Expand' />`;
+    else wideBtn.innerHTML = `<img src="images/icons/arrows-angle-contract.svg" title="Reduzir"  alt='contract' />`;
     
     isWideSheet = !isWideSheet;
     let sheetContainer = document.getElementById('sheet-container');
@@ -258,14 +258,14 @@ const sheetTemplates = [
         index: 0, 
         name: 'Modelo Marvel', 
         description: 'Baseado no site da Marvel Comics, com imagem de cabeçalho e campos do personagem sendo distribuídos lado-a-lado com os poderes e equipamentos.', 
-        img: '../images/sheet examples/marvel-sheet-template.png',
+        img: 'images/sheet examples/marvel-sheet-template.png',
         credits: 'Gio Mota'
     },
     {
         index: 1, 
         name: 'Modelo JB', 
         description: 'Um modelo simples com cabeçalhos e quebra de página dinâmica.', 
-        img: '../images/sheet examples/jb-sheet-template.png',
+        img: 'images/sheet examples/jb-sheet-template.png',
         credits: 'João Brasil'
     },
 ];
@@ -285,12 +285,7 @@ function renderSheetTemplatesOptions() {
     for(let sheetTemplate of sheetTemplates.sort()) {
         listItem = document.createElement('li');
         listItem.className = 'list-group-item';
-        if(sheetTemplate.index === currentIndex) {
-            listItem.className += ' active';
-            // listItem.setAttribute('data-bs-toggle', 'tooltip');
-            // listItem.setAttribute('data-bs-placement', 'top');
-            // listItem.setAttribute('data-bs-title', 'Selecionar Modelo');
-        }
+        if(sheetTemplate.index === currentIndex) listItem.className += ' active';
         else listItem.style.cursor = 'pointer';
 
         listItem.appendChild(TemplateCard(sheetTemplate));

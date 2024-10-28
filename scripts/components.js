@@ -64,7 +64,7 @@ function TemplateCard(templateInfo) {
 
     cardFirstRow.innerHTML = `
     <div class="col-md-4">
-        <img src="${templateInfo.img}" class="img-fluid rounded-start" alt="${templateInfo.name}">
+        <img src="${templateInfo.img}" class="img-fluid rounded-start" alt="${templateInfo.name}" />
     </div>
     <div class="col-md-8">
         <div class="card-header"><h5 class="card-title">${templateInfo.name}</h5></div>

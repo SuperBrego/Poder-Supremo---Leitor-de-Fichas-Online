@@ -17,7 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body data-bs-theme="dark">
-
+    
     <!-- ----------------------------------------------------------------------------------- -->
     <!-- Navegação -->
     <nav class="navbar navbar-expand-lg navbar-dark border-bottom border-2 border-white bg-opacity-10 min-vw-100">
@@ -38,9 +38,9 @@
                     <li class="nav-item">
                         <a class="nav-link disabled" aria-current="page" href="#">Tracker de Combate</a>
                     </li>
-                   
+                    
                     <li class="nav-item">
-                        <a class="nav-link disabled" aria-current="page" href="#" data-bs-target="modal" data-bs-target="#updatesModal">
+                        <a class="nav-link active" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#updatesModal">
                             Notas da Versão
                         </a>
                     </li>
@@ -57,6 +57,7 @@
     
     <!-- ----------------------------------------------------------------------------------- -->
     <!-- Corpo -->
+    <!-- ----------------------------------------------------------------------------------- -->
     <main id="main-main" class="max-vw-100">
         <div id="image-background"><div id="image-foreground"></div></div>
         <!-- <div id="liveAlertPlaceholder"></div> -->
@@ -64,9 +65,9 @@
     </main>
     
     <!-- ----------------------------------------------------------------------------------- -->
-    <!-- ----------------------------------------------------------------------------------- -->
     <!-- How to Use Modal -->
-    <div class="modal fade" id="howToModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <!-- ----------------------------------------------------------------------------------- -->
+    <div class="modal fade" id="howToModal" tabindex="-1" aria-labelledby="howToModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -85,13 +86,15 @@
             </div>
         </div>
     </div>
-
+    
+    <!-- ------------------------------------------------------------------------------------------------- -->
     <!-- About -->
-    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <!-- ------------------------------------------------------------------------------------------------- -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="errorModalLabel">Sobre</h1>
+                    <h1 class="modal-title fs-5" id="aboutModal">Sobre</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -104,16 +107,34 @@
         </div>
     </div>
     
+    <!-- ------------------------------------------------------------------------------------------------- -->
     <!-- Updates -->
-    <div class="modal fade" id="updatesModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <!-- ------------------------------------------------------------------------------------------------- -->
+    <div class="modal fade" id="updatesModal" tabindex="-1" aria-labelledby="updatesModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="errorModalLabel">Como Usar</h1>
+                    <h1 class="modal-title fs-5" id="updatesModal">Versão</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Este site foi desenvolvido por Bernardo Rego (usuários <i>GodsCorpse</i>, <i>SuperBrego</i> e <i>Regonalta</i>, em diversas redes), usando a HTML, CSS e Javascript, com o auxílio da ferramenta <i>Bootstrap</i> para criação dos layouts.</p>
+                    <!-- Accordion -->
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                          <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                              Versão Alfa • 0.1
+                            </button>
+                          </h2>
+                          <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <p>Disponibilizando o site pela primeira vez. Os usuários podem fazer upload dos seus arquivos de fichas e tem disponibilidade de alguns modelos para salvar em PDF.</p>
+                                <p>Assim como no Poder Supremo, os PDFs são salvos como imagens, portanto não dá para selecionar o texto. Está sendo estudado a possibilidade de usar outra ferramenta para isso, mas ainda é um caso de "não está estragado, não conserte".</p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <!-- ------------------------------- -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Fechar</button>
@@ -121,8 +142,10 @@
             </div>
         </div>
     </div>
-
+    
+    <!-- ------------------------------------------------------------------------------------------------- -->
     <!-- Error Modal -->
+    <!-- ------------------------------------------------------------------------------------------------- -->
     <div class="modal fade" id="load-error-modal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
