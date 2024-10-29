@@ -339,6 +339,8 @@ function setMarvelOffensiveBlocks(offensiveData) {
 function setMarvelComplicationsBlock(complications) {
     let blocks = [];
 
+    if(complications.length === 0) return blocks;
+
     let sectionHeader, complicationBlock, complicationHeader, complicationDescription;
     
     sectionHeader = document.createElement('h2');

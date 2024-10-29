@@ -5,7 +5,7 @@
 * @returns {HTMLElement}
 */
 const CharacterChard = (character, index) => {
-    let image = (character.gallery[0].length > 0) ? character.gallery[0] : '../images/placeholder-char-img.jpg';
+    let image = (character.gallery[0].length > 0) ? character.gallery[0] : 'images/placeholder-char-img.jpg';
     let name = character.data.personalInfo.heroicName;
     let powerLevel = character.data.powerLevel;
     let points = character.data.points.abilities + character.data.points.advantages + character.data.points.powers + character.data.points.skills + character.data.points.defenses; 
@@ -279,9 +279,11 @@ function renderEquipmentDefault(equipment) {
 
     let output = '';
 
-    if(isPowerEquip) return `<b>${equipment.name}</b>: ${renderPowerDefault(equipment.powerEquipData)}`;
+    let equipName = equipment.name.replaceAll('> ', '');
 
-    output += `<b>${equipment.name}</b> ${isStructure ? `(${equipment.equipType})` : ''} • <b>${equipment.totalPoints} pontos</b>`;
+    if(isPowerEquip) return `<b>${equipName}</b>: ${renderPowerDefault(equipment.powerEquipData)}`;
+
+    output += `<b>${equipName}</b> ${isStructure ? `(${equipment.equipType})` : ''} • <b>${equipment.totalPoints} pontos</b>`;
     if(isVehicle || isHeadquarters) {
         output += `
         ${isVehicle 
@@ -307,9 +309,12 @@ function renderEquipmentDefault(equipment) {
             : ''}
         `;
     }
-    else if((isMultipleEquip || isEquipArray) && (equipment.equipList && equipment.equipList.length > 0)) {
-
-    }
+    
+    /**
+     * Esse else abaixo não está sendo necessário em virtude que estou usando o Spread Equipment.
+     * Mas deixando caso esqueça.
+    */
+    // else if((isMultipleEquip || isEquipArray) && (equipment.equipList && equipment.equipList.length > 0)) { }
 
     return output;
 }

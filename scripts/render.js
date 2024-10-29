@@ -2,6 +2,8 @@ const mainContent = document.getElementById('content');
 const imageForeground = document.getElementById('image-foreground');
 var currentCharacter = {};
 var currentIndex = 0;
+var keepGallery = false;
+var keepJournals = false;
 
 var isWideSheet = false;
 
@@ -72,8 +74,12 @@ function renderCharacterSheet(character, index) {
 
     // Deixar opaco o fundo porque tá me dando enjoo
     imageForeground.style.backgroundColor = `rgba(1, 1, 1, .99)`;
+
+    //  Top com Várias opções
+    // const flexTopPage = document.createElement('div');
+    // flexTopPage.className = 'd-flex flex-row';
     
-    // Grupo de Botões.
+    //      Grupo de Botões.
     const btnGroup = document.createElement('div');
     btnGroup.className = 'btn-group p-2 btn-lg ms-3 mt-3';
     btnGroup.setAttribute('role', 'group');
@@ -82,15 +88,14 @@ function renderCharacterSheet(character, index) {
     const returnSheetList = document.createElement('button');
     returnSheetList.className = 'btn btn-primary';
     returnSheetList.innerHTML = '← Retornar';
-    // ***************************************** ↓ mudar aqui, temos que voltar aos cards.
-    returnSheetList.addEventListener('click', () => { renderSheetList() });    
+    returnSheetList.addEventListener('click', () => { renderSheetList() });
     
     //      Salvar a Ficha
     const saveBtn = document.createElement('button');
     saveBtn.className = 'btn btn-primary';
     saveBtn.innerHTML = 'Salvar PDF';
     saveBtn.disabled = true;
-    saveBtn.addEventListener('click', () => { saveToPDF() });    
+    saveBtn.addEventListener('click', () => { saveToPDF() });
     
     //      Espandir a ficha
     const widenBtn = document.createElement('button');
@@ -99,11 +104,33 @@ function renderCharacterSheet(character, index) {
     widenBtn.innerHTML = `<img src="images/icons/arrows-angle-expand.svg" title="Aumentar" alt='Expand' />`;
     widenBtn.disabled = true;
     widenBtn.addEventListener('click', () => wideContractSheet());
+
+    //      Check salvar galeria
+    // <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
+    const keepGalleryInput = document.createElement('input');
+    keepGalleryInput.type = 'checkbox';
+    keepGalleryInput.className = 'btn-check';
+    keepGalleryInput.id = 'save-gallery-check';
+    keepGalleryInput.autocomplete = 'off';
+    keepGalleryInput.checked = !keepGallery;
+    
+    const keepGalleryLabel = document.createElement('label');
+    keepGalleryLabel.className = 'btn btn-primary';
+    keepGalleryLabel.for = 'save-gallery-check';    
+    keepGalleryLabel.innerHTML = 'Salvar Galeria';
+    keepGalleryLabel.onclick = () => { 
+        keepGallery = !keepGallery; 
+        keepGalleryInput.checked = keepGallery;
+    }
+
+    //      Check salvar registros de campanha
     
     // Add botões
     btnGroup.appendChild(returnSheetList);
     btnGroup.appendChild(saveBtn);
     btnGroup.appendChild(widenBtn);
+    btnGroup.appendChild(keepGalleryInput);
+    btnGroup.appendChild(keepGalleryLabel);
     
     // Container da Ficha
     const sheetContainer = document.createElement('div')
