@@ -104,33 +104,11 @@ function renderCharacterSheet(character, index) {
     widenBtn.innerHTML = `<img src="images/icons/arrows-angle-expand.svg" title="Aumentar" alt='Expand' />`;
     widenBtn.disabled = true;
     widenBtn.addEventListener('click', () => wideContractSheet());
-
-    //      Check salvar galeria
-    // <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
-    const keepGalleryInput = document.createElement('input');
-    keepGalleryInput.type = 'checkbox';
-    keepGalleryInput.className = 'btn-check';
-    keepGalleryInput.id = 'save-gallery-check';
-    keepGalleryInput.autocomplete = 'off';
-    keepGalleryInput.checked = !keepGallery;
-    
-    const keepGalleryLabel = document.createElement('label');
-    keepGalleryLabel.className = 'btn btn-primary';
-    keepGalleryLabel.for = 'save-gallery-check';    
-    keepGalleryLabel.innerHTML = 'Salvar Galeria';
-    keepGalleryLabel.onclick = () => { 
-        keepGallery = !keepGallery; 
-        keepGalleryInput.checked = keepGallery;
-    }
-
-    //      Check salvar registros de campanha
     
     // Add botões
     btnGroup.appendChild(returnSheetList);
     btnGroup.appendChild(saveBtn);
     btnGroup.appendChild(widenBtn);
-    btnGroup.appendChild(keepGalleryInput);
-    btnGroup.appendChild(keepGalleryLabel);
     
     // Container da Ficha
     const sheetContainer = document.createElement('div')
